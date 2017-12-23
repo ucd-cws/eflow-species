@@ -1,0 +1,310 @@
+---
+title: "Eflow species"
+output: html_notebook
+---
+
+Combines the eflow classifications with the PISCES species data. This notbook relies on steps from two other notebooks `eflows-db.Rmd` which pulls data from the PISCES data base and save it as a csv and `eflows-distance.Rmd` which calculates the total stream distance of each eflow class in each HUC12. 
+
+```{r setup}
+library(tidyverse)
+
+# since you can't source from .Rmd's let's just load the data from the csv files
+pisces_huc12_list <- read.csv("data/pisces_huc12_fish_presence_current.csv", stringsAsFactors = FALSE)
+
+pisces_huc12_list$HUC_12 <- as.character(pisces_huc12_list$HUC_12)
+
+huc12_eflow_percents <- read.csv("data/HUC12s_eflow_percent.csv", stringsAsFactors = FALSE)
+
+# Load in HUC shapefiles
+huc12_sf <- st_read("shps/HUC12s_simple/HUC12s.shp") # simplified using mapshaper.com
+huc6_sf <- st_read("shps/HUC6s_simple/HUC6s.shp") # simplified using mapshaper.com
+```
+
+
+## Join the species info to the huc12 percent data
+
+Since we want both extreams for the threashold (0%, 100%) let's start by joining the species data to the huc12 eflow percent dataframe. The end result will be that every combination of huc12~eflow type will be assigned all the species that were found in the watershed. We know that this is probably not going to be the case and there will be a threshold but this is neccissary since we need to run both extreams (0% and 100% dominance).
+
+```{r join, dependson=pisces_huc12_list, dependson=huc12_eflow_percents}
+head(huc12_eflow_percents)
+head(pisces_huc12_list)
+
+# joins all the species info the eflow huc12 %'s
+eflows_percents_fish  <- left_join(huc12_eflow_percents, pisces_huc12_list, by=c("HUC12"="HUC_12"))
+                                   
+```
+
+## filter
+
+```{r filter}
+# todo this is the spot to filter by percentage
+filter_percents <- function(data, threshold){
+  data_p <- data %>% filter(percent>=threshold)
+  return(data_p)
+}
+
+no_threashold <- filter_percents(eflows_percents_fish, 0)
+threashold_25 <- filter_percents(eflows_percents_fish, 0.25)
+threashold_100 <- filter_percents(eflows_percents_fish, 1)
+
+
+
+```
+
+
+
+## Group by HUC6 field 
+
+```{r}
+# summarize the number of species in each huc6, number of natives, number of non-natives, count of the number of endangered species
+
+summarize_huc6 <- function(data){
+  # collect all the unique observations at the huc 6
+  # since the original data is at the huc12 scale using distinct
+  # will essentially concatonate all the inside data 
+  unique_huc6 <- data %>%
+    distinct(HUC6, eflow_type, eflow_name, abbr, name, species_id, 
+             common_name, native, ca_status, fed_listing, ca_listing)
+  
+  # summary counts using the huc6 scale
+  summary_huc6 <- unique_huc6 %>% 
+    group_by(HUC6, eflow_type, eflow_name) %>%
+    dplyr::summarize(count_native=sum(native==1), count_nonnative=sum(native==0),
+                     count_fed_threatened=sum(fed_listing=="T"), count_fed_endangered=sum(fed_listing=="E"),
+                     count_fed_TE=sum(fed_listing=="E"|fed_listing=="T"), species_list=paste(common_name, collapse = ", "))
+  return(summary_huc6)
+}
+
+
+summarize_huc12 <- function(data){
+  # collect all the unique observations at the huc 12
+  # since the original data is at the huc12 scale using distinct
+  # will essentially concatonate all the inside data 
+  unique_huc <- data %>%
+    distinct(HUC12, eflow_type, eflow_name, abbr, name, species_id, 
+             common_name, native, ca_status, fed_listing, ca_listing)
+  
+  # summary counts using the huc6 scale
+  summary_huc <- unique_huc %>% 
+    group_by(HUC12, eflow_type, eflow_name) %>%
+    dplyr::summarize(count_native=sum(native==1), count_nonnative=sum(native==0),
+                     count_fed_threatened=sum(fed_listing=="T"), count_fed_endangered=sum(fed_listing=="E"),
+                     count_fed_TE=sum(fed_listing=="E"|fed_listing=="T"), species_list=paste(common_name, collapse = ", "))
+  return(summary_huc)
+}
+
+
+```
+
+
+
+
+
+
+
+
+
+```{r facet eflow percents, fig.height=12, fig.width=12, message=FALSE, warning=FALSE}
+
+summarize_huc12(no_threashold)
+
+# join in the eflow percent data to the huc12 shapefile (sf object)
+# will need to use an right (outer) join since there will be multiple rows for each HUC12
+huc12_sf.no_thresh <- right_join(huc12_sf, summarize_huc12(no_threashold), by=c("HUC_12"="HUC12")) 
+
+ggplot() + 
+  geom_sf(huc12_sf.no_thresh, mapping = aes(fill=count_native),color = NA, lwd = 5)+
+  scale_fill_distiller("# of species", palette = "Spectral", direction = -1) +
+  geom_sf(huc6_sf, mapping=aes(), fill=NA, color="black", lwd=1.25)+
+  ggtitle("HUC12 - eflows no threshold") +
+  theme_bw()+
+  theme(panel.grid.major = element_line(colour = 'transparent'))+
+  facet_wrap(~eflow_name)+
+  theme(strip.background = element_blank(), # facet theme control
+        strip.placement = "outside", 
+        axis.line.x = element_line(color="black", size = 1),
+        axis.line.y = element_line(color="black", size = 1),
+        plot.title = element_text(hjust = 0.5))
+
+
+```
+
+```{r facet eflow percents, fig.height=12, fig.width=12, message=FALSE, warning=FALSE}
+
+
+# join in the eflow percent data to the huc12 shapefile (sf object)
+# will need to use an right (outer) join since there will be multiple rows for each HUC12
+huc12_sf.thresh_100 <- right_join(huc12_sf, summarize_huc12(threashold_100), by=c("HUC_12"="HUC12")) 
+
+ggplot() + 
+  geom_sf(huc12_sf.thresh_100, mapping = aes(fill=count_native),color = NA, lwd = 5)+
+  scale_fill_distiller("# of species", palette = "Spectral", direction = -1) +
+  geom_sf(huc6_sf, mapping=aes(), fill=NA, color="black", lwd=1.25)+
+  ggtitle("HUC12 - eflows dominant eflow only") +
+  theme_bw()+
+  theme(panel.grid.major = element_line(colour = 'transparent'))+
+  facet_wrap(~eflow_name)+
+  theme(strip.background = element_blank(), # facet theme control
+        strip.placement = "outside", 
+        axis.line.x = element_line(color="black", size = 1),
+        axis.line.y = element_line(color="black", size = 1),
+        plot.title = element_text(hjust = 0.5))
+
+
+```
+
+```{r facet eflow percents, fig.height=12, fig.width=12, message=FALSE, warning=FALSE}
+
+
+# join in the eflow percent data to the huc12 shapefile (sf object)
+# will need to use an right (outer) join since there will be multiple rows for each HUC12
+huc12_sf.thresh_25 <- right_join(huc12_sf, summarize_huc12(threashold_25), by=c("HUC_12"="HUC12")) 
+
+ggplot() + 
+  geom_sf(huc12_sf.thresh_25, mapping = aes(fill=count_native),color = NA, lwd = 5)+
+  scale_fill_distiller("# of species", palette = "Spectral", direction = -1) +
+  geom_sf(huc6_sf, mapping=aes(), fill=NA, color="black", lwd=1.25)+
+  ggtitle("HUC12 - eflows 25%") +
+  theme_bw()+
+  theme(panel.grid.major = element_line(colour = 'transparent'))+
+  facet_wrap(~eflow_name)+
+  theme(strip.background = element_blank(), # facet theme control
+        strip.placement = "outside", 
+        axis.line.x = element_line(color="black", size = 1),
+        axis.line.y = element_line(color="black", size = 1),
+        plot.title = element_text(hjust = 0.5))
+
+
+```
+
+
+
+
+
+
+
+
+
+## Plots
+
+### Count of the number of native fish species
+
+```{r}
+p <- ggplot(d, aes(HUC12, count_native))+
+  geom_bar(stat="identity")+
+  ylab("Native Fish Species")+
+  theme_bw()+
+  theme(panel.grid.major = element_blank(),
+      plot.title = element_text(hjust = 0.5, size=16),
+      panel.grid.minor = element_blank(),
+      legend.position="right", # position of legend or none
+      legend.direction="vertical", # orientation of legend
+      legend.title= element_blank(), # no title for legend
+      legend.key.size = unit(0.5, "cm"),
+      axis.text.y=element_text(size=14),
+      axis.text.x=element_text(size=10, angle=90, vjust=0.5, hjust=1),
+      axis.title.y=element_text(size=14),
+      axis.title.x=element_blank())+
+  facet_wrap(~eflow_name)
+p
+```
+
+### Count of the number of threatened and endanged species
+
+```{r}
+p <- ggplot(huc6_summary, aes(HUC6, count_fed_TE))+
+  geom_bar(stat="identity")+
+  ylab("Number of Threatened + \n Endangered Species")+
+  theme_bw()+
+  theme(panel.grid.major = element_blank(),
+      plot.title = element_text(hjust = 0.5, size=16),
+      panel.grid.minor = element_blank(),
+      legend.position="right", # position of legend or none
+      legend.direction="vertical", # orientation of legend
+      legend.title= element_blank(), # no title for legend
+      legend.key.size = unit(0.5, "cm"),
+      axis.text.y=element_text(size=14),
+      axis.text.x=element_text(size=10, angle=90, vjust=0.5, hjust=1),
+      axis.title.y=element_text(size=14),
+      axis.title.x=element_blank())+
+  facet_wrap(~eflow_name)
+p
+```
+
+
+# Maps
+
+```{r}
+# open the shapefile
+library("rgdal") # requires sp, will use proj.4 if installed
+library("maptools")
+library("ggplot2")
+
+shapefile <- readOGR("data", layer = "HUC6_simple")
+# Next the shapefile has to be converted to a dataframe for use in ggplot2
+shapefile@data$id = rownames(shapefile@data)
+shapefile.points = fortify(shapefile, region="id")
+shapefile.df = inner_join(shapefile.points, shapefile@data, by="id")
+
+# join huc6 summary to shapefile data frame using right join
+shapefile.df.huc6 <- right_join(shapefile.df, huc6_summary, by="HUC6")
+```
+
+
+## Map of HUC6s with number of native fish species
+
+
+```{r}
+#shapefile.df.huc6_sub <- shapefile.df.huc6 %>% filter(abbr=="GW") # subset for debug
+
+p <- ggplot()+
+  geom_polygon(data=shapefile.df.huc6, aes(long,lat,group=group,fill=count_native), colour = "black", size = 0.5)+
+  geom_path(data = shapefile.df, aes(long, lat, group = group), colour = "black") + # outline of all the HUC6s
+  coord_equal() +
+  ggtitle("Number of Native Fish per HUC6")+
+  scale_fill_gradient(name="Species", low="yellow", high="orange2")+
+  theme_bw() +
+  theme( panel.grid.major = element_blank(),
+        plot.title = element_text(hjust = 0.5),
+        panel.grid.minor = element_blank(),
+        legend.position="right", # position of legend or none
+        axis.text=element_blank(),
+        axis.title=element_blank(),
+        axis.ticks=element_blank()
+        
+  )+
+  facet_wrap(~abbr)
+
+p
+
+```
+
+
+## map of T/E counts
+
+```{r}
+#shapefile.df.huc6_sub <- shapefile.df.huc6 %>% filter(abbr=="GW") # subset for debug
+
+p <- ggplot()+
+  geom_polygon(data=shapefile.df.huc6, aes(long,lat,group=group,fill=count_fed_TE), colour = "black", size = 0.5)+
+  geom_path(data = shapefile.df, aes(long, lat, group = group), colour = "black") + # outline of all the HUC6s
+  coord_equal() +
+  ggtitle("Number of Threatened and Endangered \nFish Species per HUC6")+
+  scale_fill_gradient(name="Species", low="lightblue1", high="royalblue")+
+  theme_bw() +
+  theme( panel.grid.major = element_blank(),
+        plot.title = element_text(hjust = 0.5),
+        panel.grid.minor = element_blank(),
+        legend.position="right", # position of legend or none
+        axis.text=element_blank(),
+        axis.title=element_blank(),
+        axis.ticks=element_blank()
+        
+  )+
+  facet_wrap(~abbr)
+
+p
+
+```
+
+

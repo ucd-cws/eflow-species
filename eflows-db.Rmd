@@ -1,0 +1,72 @@
+---
+title: "Eflows species list - database"
+output: html_notebook
+---
+
+The purpose of this Rnotebook is to query the PISCES/Aquarius databases to get the relevant information for the eflow species lists. The data will be extracted from the databases and saved as flat csv files. The advantage of this approach is that it avoids multiple db pulls and allows people without access to the primary data utilize the other scripts and notebooks in this repository
+
+
+## Pisces
+
+See pisces.ucdavis.edu for instructions for installing the database and software. There is also documentation available at docs.pisces.ucdavis.edu. Pisces comprehensively maps the presence and absance of aquatic species (primarily focused on California Fish) using watershed basins (HUC12s) as a common unit. The data is a mix of field observations and expert-opinion and contains both present-day range extent and historical (~pre-1970s) range extent. The data for California's native and non-native fish taxa went through a highly rigerous QA/QC and validation process. 
+
+```{r packages, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(RSQLite)
+library(dplyr)
+
+```
+
+```{r db_pisces_setup}
+# set the path to the location of the pisces database
+pisces_db <- "C:\\ProgramData\\CWS\\PISCES\\data\\pisces.sqlite" # path to my local pisces.sqlite database
+#pisces_db <- "X:\\PISCES\\data\\pisces.sqlite" # path to X drive pisces.sqlite database # TODO CHECK
+
+# establish connection to the sqlite file
+con = dbConnect(drv=RSQLite::SQLite(), dbname=pisces_db, ":memory:")
+```
+
+```{r, dependson=con}
+# get a list of all tables currently in the database to check that the connection is working
+alltables = dbListTables(con)
+print(alltables[1:10]) # only going to print the first 10
+```
+
+## Pull species list for all HUC12s for fish species 
+
+Send query to the pisces database to pull all the QA/QC records for native and non-native fish in California. Returns a dataframe of all the distict records with additional information about the species threatened and endangered status. The data returned from the database is every unique HUC_12~species combination. The data includes the species id, common name, native or non-native (1=native, 0=non-native), CA state status, federal listing status, and California listing status. The HUC 6 value used for aggregating is calculated by parsing the left 6 characters of the HUC12 codes.
+
+```{r fish_by_huc12, echo=FALSE}
+
+# pull list of fish species by HUC12, with status. 
+# Note: only using data from QAQC collections for fish.
+
+# TODO: figure out a way to do this using dplyr instead of the ugly SQL block
+
+pisces_huc12_list <-dbGetQuery(con, 'SELECT DISTINCT t1.zone_id as HUC_12, t1.species_id as species_id, t2.common_name as common_name, t2.native as native, t3.ca_status as ca_status, t3.fed_listing as fed_listing, t3.ca_listing as ca_listing FROM observations AS t1, species AS t2, species_aux as t3, species_groups, defs_species_groups, observation_collections WHERE t1.presence_type IN (1,3,6,7,9) AND t1.species_id = t2.fid and t1.species_id = t3.fid AND observation_collections.observation_id = t1.objectid and observation_collections.collection_id in (5,15,16) AND defs_species_groups.group_name = "Fish" AND defs_species_groups.id = species_groups.group_id and species_groups.fid=t1.species_id')
+
+# add column for HUC6 by taking the left 6 chars from the HUC12 
+pisces_huc12_list <- pisces_huc12_list %>% mutate(HUC6=substr(HUC_12,1,6))
+
+# Disconnect from the PISCES database
+dbDisconnect(con)
+# print("Disconnected from PISCES")
+
+head(pisces_huc12_list)
+```
+
+
+```{r pisces_csv, dependson=huc12_list}
+export_loc <- "data/pisces_huc12_fish_presence_current.csv"
+
+write.csv(pisces_huc12_list, export_loc, row.names = FALSE)
+print(paste("Saved to:", export_loc))
+```
+
+
+
+## Aquarius
+
+TODO
+

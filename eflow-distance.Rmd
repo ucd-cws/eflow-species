@@ -71,9 +71,17 @@ ef_huc12_percent<-totlength %>%
 head(ef_huc12_percent)
 
 # remove all of the null values from the dataframe
-ef_huc12_percent_wo_nulls <- ef_huc12_percent %>% filter(percent>0)
+ef_huc12_percent_wo_nulls <- ef_huc12_percent %>% 
+  filter(percent>0) %>% 
+  rowwise() %>%
+  mutate(eflow_name=lookup_fullname(eflow_type)) # add column with eflow class full name
 
 
+# save the dataframe to a csv
+export_loc <- "data/HUC12s_eflow_percent.csv"
+
+write.csv(ef_huc, export_loc, row.names = FALSE)
+print(paste("Saved to:", export_loc))
 ```
 
 ## Histogram of the Eflow Percentages
@@ -159,9 +167,7 @@ Map shows the HUC12s that contain segments for the eflow class. Figure is facete
 
 # join in the eflow percent data to the huc12 shapefile (sf object)
 # will need to use an right (outer) join since there will be multiple rows for each HUC12
-huc12_sf.ef_percents <- right_join(huc12_sf, ef_huc12_percent_wo_nulls, by=c("HUC_12"="HUC12")) %>% 
-  rowwise() %>%
-  mutate(eflow_name=lookup_fullname(eflow_type)) # add column with eflow class full name
+huc12_sf.ef_percents <- right_join(huc12_sf, ef_huc12_percent_wo_nulls, by=c("HUC_12"="HUC12")) 
 
 ggplot() + 
   geom_sf(huc12_sf.ef_percents, mapping = aes(fill=percent*100),color = NA, lwd = 5)+
@@ -204,8 +210,7 @@ ef_huc12_percent_rank <-ef_huc12_percent_wo_nulls %>% group_by(HUC12) %>% mutate
 ef_percent_rank_summary <-ef_huc12_percent_rank %>% 
   group_by(eflow_type, per_rank) %>% 
   summarize(mean_percent=mean(percent), counts=n()) %>% 
-  rowwise() %>%
-  mutate(eflow_name=lookup_fullname(eflow_type)) # add column with eflow class full name
+  rowwise() 
 
 # tile plot showing the mean percent dominance by eflow class and relative rank 
 ggplot(ef_percent_rank_summary, aes(per_rank, eflow_type))+
@@ -228,11 +233,3 @@ ggplot(ef_percent_rank_summary, aes(per_rank, eflow_type))+
           axis.text.y=element_text(size=10)
           )
 ```
-
-
-# Likelihood of two eflow types coexisting in same HUC12.
-
-```{r}
-# TODO
-```
-
