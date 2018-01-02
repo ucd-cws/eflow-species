@@ -21,7 +21,7 @@ library(dplyr)
 ```{r db_pisces_setup}
 # set the path to the location of the pisces database
 pisces_db <- "C:\\ProgramData\\CWS\\PISCES\\data\\pisces.sqlite" # path to my local pisces.sqlite database
-#pisces_db <- "X:\\PISCES\\data\\pisces.sqlite" # path to X drive pisces.sqlite database # TODO CHECK
+#pisces_db <- "X:\\Pisces\\data\\pisces.sqlite" # path to X drive pisces.sqlite database 
 
 # establish connection to the sqlite file
 con = dbConnect(drv=RSQLite::SQLite(), dbname=pisces_db, ":memory:")

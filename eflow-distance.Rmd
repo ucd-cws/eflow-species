@@ -1,6 +1,8 @@
 ---
 title: "Eflow HUC12 data explore"
-output: html_notebook
+output:
+  html_document:
+    df_print: paged
 ---
 
 This R markdown notebook contains preliminary analysis of the distribution of the Eflow classes when summarized by watersheds (HUC12s). In ArcGis, the total segment length for each eflow stream classification was summed up for each of the HUC12s in the major basins California. The NHD stream segments in zone 16 were not classifed so no results for that region will be presented.  
@@ -80,7 +82,7 @@ ef_huc12_percent_wo_nulls <- ef_huc12_percent %>%
 # save the dataframe to a csv
 export_loc <- "data/HUC12s_eflow_percent.csv"
 
-write.csv(ef_huc, export_loc, row.names = FALSE)
+write.csv(ef_huc12_percent_wo_nulls, export_loc, row.names = FALSE)
 print(paste("Saved to:", export_loc))
 ```
 
