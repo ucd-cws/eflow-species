@@ -1,0 +1,140 @@
+---
+title: "Eflows Species Clustering in CA Regions"
+output:
+  html_document:
+    df_print: paged
+---
+
+```{r setup, echo=FALSE, include=FALSE}
+library(sf)
+library(maps)
+#library(devtools)
+#devtools::install_github("tidyverse/ggplot2") # need latest version of ggplot2 in order to use geom_sf
+library(ggplot2)
+library(rgdal)
+library(tidyr)
+library(dplyr)
+
+group_palette <- c('#a6cee3','#1f78b4','#b2df8a','#33a02c','#fb9a99','#e31a1c','#fdbf6f','#ff7f00','#cab2d6','#6a3d9a')
+
+species_maps <-function(groupname, title){
+  suffix<-"_R50_Std_AM_Euc"
+        huc_data <- sf::st_as_sf(rgdal::readOGR(paste("huc_groupings/",groupname,"_flowsensitive.gpkg", sep=""),groupname, stringsAsFactors=FALSE))
+      # now, we need to convert the attributes we're using for groupings into a single column so that GGPlot can do our mapping for us with facets
+      huc_data_mapping <- huc_data %>% gather(key=model_run, value=grouping, paste(groupname,"_KM2",suffix, sep=""),paste(groupname,"_KM3",suffix, sep=""),paste(groupname,"_KM4",suffix, sep=""),paste(groupname,"_KM5",suffix, sep=""),paste(groupname,"_KM6",suffix, sep=""),paste(groupname,"_KM7",suffix, sep=""),paste(groupname,"_KM8",suffix, sep=""),paste(groupname,"_KM9",suffix, sep=""))
+      
+      plot <- ggplot() + 
+        geom_sf(huc_data_mapping, lwd = 5, mapping=aes(fill=grouping), color=NA)+ 
+        scale_fill_manual(values=group_palette, limits=c(1,2,3,4,5,6,7,8,9)) +
+        ggtitle(paste(title," Species Groupings", sep="")) +
+        facet_wrap("model_run")+
+        theme_bw()+
+        theme(panel.grid.major = element_line(colour = 'transparent'))+
+        theme(strip.background = element_blank(), # facet theme control
+              strip.placement = "outside", 
+              axis.line.x = element_line(color="black", size = 1),
+              axis.line.y = element_line(color="black", size = 1),
+              plot.title = element_text(hjust = 0.5))
+  return(list("region_map"=plot,"species_data"=huc_data))
+      
+}
+
+species_lists_by_group <- function (data_frame, group_name, groups=c(2,3,4,5,6,7,8,9)){
+    st_geometry(data_frame) <- NULL # drop the SF geometry info
+  
+  suffix<-"_R50_Std_AM_Euc"
+  remove_fields <- c("OBJECTID", "hucs_filtered_HUC_8", "hucs_filtered_HUC_10", "hucs_filtered_HUC_12", "hucs_filtered_ACRES", "hucs_filtered_NCONTRB_A", "hucs_filtered_HU_10_GNIS", "hucs_filtered_HU_12_GNIS", "hucs_filtered_HU_10_DS", "hucs_filtered_HU_10_NAME", "hucs_filtered_HU_10_MOD", "hucs_filtered_HU_10_TYPE", "hucs_filtered_HU_12_DS", "hucs_filtered_HU_12_NAME", "hucs_filtered_HU_12_MOD", "hucs_filtered_HU_12_TYPE", "hucs_filtered_STATES", "hucs_filtered_CVA_NAME", "hucs_filtered_huc_id", "Flow_Sensitive_current_OBJECTID", "Flow_Sensitive_current_HUC_12", "hucs_filtered_META_ID", "Shape_Length", "Shape_Area", "huc4","huc_region_group",paste("KM_6",suffix, sep=""),paste("KM_5",suffix, sep=""),paste("KM_8",suffix, sep=""),paste("KM_10",suffix, sep=""),paste("KM_12",suffix, sep=""),paste("KM_14",suffix, sep=""))
+  
+  data_of_interest <- select(data_frame, -one_of(remove_fields))  # filters to just the current group and removes extra fields
+  
+  current_field_names <-names(data_of_interest) # get the current column names
+  new_field_names <- gsub("Flow_Sensitive_current_", "", current_field_names)  # replace the prefix on the fields
+  
+  colnames(data_of_interest) <- new_field_names
+  
+  for(grouping in groups){
+    writeLines(paste("\n\n",grouping, "Groups", sep=" "))
+    for(group in seq(1,grouping)){ # for each subgroup in this grouping
+      writeLines(paste("\nGroup", group, sep=" "))
+      
+      records_in_group <- data_of_interest %>% dplyr::filter_(paste(paste(group_name,"_KM",grouping,suffix, sep=""), "==", as.character(group)))  # filters to just the current group
+
+      records_in_group <- records_in_group[, -grep(".+KM.+", colnames(records_in_group))]  # drop columns for groupings
+      gathered_data <- as.data.frame(records_in_group) %>% tidyr::gather(key="species", value="presence")
+      found_species <- gathered_data %>% dplyr::filter(presence==1) %>% distinct(species)
+      writeLines(paste(nrow(found_species), "species in group"))
+      writeLines(found_species$species)
+    }
+  }
+}
+
+```
+
+
+## Map of Region Breakouts
+The region was broken out primarily into
+* Coast (North Coast->Santa Barbara)
+* Central Valley (anything draining out through the Central Valley - excludes Honey/Eagle Lakes)
+* Great Basin (anything in hydrologic region 16 in the northern part of the state, contiguous)
+* Desert (southern coast, including LA, and anything in the desert regions. Includes eastern sierra that is part of region 18, souther reaches of region 15 in the state, portion of Colorado River, and a small piece of region 16)
+
+```{r map of region breakouts, fig.height=12, fig.width=12,}
+region_data <- sf::st_as_sf(rgdal::readOGR("groupings/flowsensitive_current.gpkg", "flowsensitive_current", stringsAsFactors=FALSE))
+
+ggplot() + 
+  geom_sf(region_data, lwd = 5, mapping=aes(fill=huc_region_group), color=NA)+ 
+  ggtitle("Region Breakout") + 
+  theme_bw()+
+  theme(panel.grid.major = element_line(colour = 'transparent'))+
+  theme(strip.background = element_blank(), # facet theme control
+        strip.placement = "outside", 
+        axis.line.x = element_line(color="black", size = 1),
+        axis.line.y = element_line(color="black", size = 1),
+        plot.title = element_text(hjust = 0.5))
+
+
+```
+
+## Central Valley
+
+```{r map central valley, fig.height=24, fig.width=24,}
+region_name = "centralvalley"
+species_info <- species_maps(region_name, "Central Valley")
+species_info$region_map  # print the map
+species_lists_by_group(species_info$species_data, region_name)  # species_info[1] is the data frame for the region
+
+
+
+```
+
+
+## Great Basin
+
+```{r map great basin, fig.height=24, fig.width=24,}
+region_name = "greatbasin"
+species_info <- species_maps(region_name, "Great Basin")
+species_info$region_map  # print the map
+species_lists_by_group(species_info$species_data, region_name)  # species_info$species_data is the data frame for the region
+
+```
+
+
+## Coast
+
+```{r map coast, fig.height=24, fig.width=24,}
+region_name = "coast"
+species_info <- species_maps(region_name, "Coast")
+species_info$region_map  # print the map
+species_lists_by_group(species_info$species_data, region_name)  # species_info$species_data is the data frame for the region
+
+```
+
+## Desert
+
+```{r map Desert, fig.height=24, fig.width=24,}
+region_name = "desert"
+species_info <- species_maps(region_name, "Desert")
+species_info$region_map  # print the map
+species_lists_by_group(species_info$species_data, region_name)  # species_info$species_data is the data frame for the region
+
+```
