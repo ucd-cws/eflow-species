@@ -19,16 +19,18 @@ library(dplyr)
 group_palette <- c('#a6cee3','#1f78b4','#b2df8a','#33a02c','#fb9a99','#e31a1c','#fdbf6f','#ff7f00','#cab2d6','#6a3d9a')
 
 huc12_eflow_percents <- read.csv("data/HUC12s_eflow_percent.csv", stringsAsFactors = FALSE)
-suffix<-"_R50_Std_AM_Euc"
+suffix<-"groups_num"
 
-species_maps <-function(groupname, title){
-        huc_data <- sf::st_as_sf(rgdal::readOGR(paste("data/clustering/huc_groupings/",groupname,"_flowsensitive.gpkg", sep=""),groupname, stringsAsFactors=FALSE))
+species_maps <-function(groupname, title, region_data){
+    
+      huc_data <- region_data %>% drop_na(paste(groupname,'_2groups_num', sep=""))    
+  
       # now, we need to convert the attributes we're using for groupings into a single column so that GGPlot can do our mapping for us with facets
-      huc_data_mapping <- huc_data %>% gather(key=model_run, value=grouping, paste(groupname,"_KM2",suffix, sep=""),paste(groupname,"_KM3",suffix, sep=""),paste(groupname,"_KM4",suffix, sep=""),paste(groupname,"_KM5",suffix, sep=""),paste(groupname,"_KM6",suffix, sep=""),paste(groupname,"_KM7",suffix, sep=""),paste(groupname,"_KM8",suffix, sep=""),paste(groupname,"_KM9",suffix, sep=""))
+      huc_data_mapping <- huc_data %>% gather(key=model_run, value=grouping, paste(groupname,"_2",suffix, sep=""),paste(groupname,"_3",suffix, sep=""),paste(groupname,"_4",suffix, sep=""),paste(groupname,"_5",suffix, sep=""),paste(groupname,"_6",suffix, sep=""),paste(groupname,"_7",suffix, sep=""),paste(groupname,"_8",suffix, sep=""),paste(groupname,"_9",suffix, sep=""))
       
       plot <- ggplot() + 
-        geom_sf(huc_data_mapping, lwd = 5, mapping=aes(fill=grouping), color=NA)+ 
-        scale_fill_manual(values=group_palette, limits=c(1,2,3,4,5,6,7,8,9)) +
+        geom_sf(huc_data_mapping, lwd = 5, mapping=aes(fill=factor(grouping)), color=NA)+
+        scale_fill_manual(values=group_palette, limits=c(1,2,3,4,5,6,7,8,9,10)) +
         ggtitle(paste(title," Species Groupings", sep="")) +
         facet_wrap("model_run")+
         theme_bw()+
@@ -44,10 +46,10 @@ species_maps <-function(groupname, title){
 
 
 species_lists_by_group_dfs <- function (data_frame, group_name, groups=c(2,3,4,5,6,7,8,9), counts=FALSE){
-  # data.frame version of the code
-  
+
+  data_frame <- data_frame %>% filter(!is.na(paste(group_name,'2groups_num', sep="")))
   st_geometry(data_frame) <- NULL # drop the SF geometry info
-  remove_fields <- c("OBJECTID", "hucs_filtered_HUC_8", "hucs_filtered_HUC_10", "hucs_filtered_HUC_12", "hucs_filtered_ACRES", "hucs_filtered_NCONTRB_A", "hucs_filtered_HU_10_GNIS", "hucs_filtered_HU_12_GNIS", "hucs_filtered_HU_10_DS", "hucs_filtered_HU_10_NAME", "hucs_filtered_HU_10_MOD", "hucs_filtered_HU_10_TYPE", "hucs_filtered_HU_12_DS", "hucs_filtered_HU_12_NAME", "hucs_filtered_HU_12_MOD", "hucs_filtered_HU_12_TYPE", "hucs_filtered_STATES", "hucs_filtered_CVA_NAME", "hucs_filtered_huc_id", "Flow_Sensitive_current_OBJECTID", "Flow_Sensitive_current_HUC_12", "hucs_filtered_META_ID", "Shape_Length", "Shape_Area", "huc4","huc_region_group",paste("KM_6",suffix, sep=""),paste("KM_5",suffix, sep=""),paste("KM_8",suffix, sep=""),paste("KM_10",suffix, sep=""),paste("KM_12",suffix, sep=""),paste("KM_14",suffix, sep=""))
+  remove_fields <- c("OBJECTID", "huc_8", "huc_10", "huc_12_string", "huc_12_double", "taxa_count", "geom_Length", "geom_Area", "oid_int_copy", "Shape_Length", "Shape_Area", "huc4","huc_region_group")
   
   data_of_interest <- select(data_frame, -one_of(remove_fields))  # filters to just the current group and removes extra fields
   
@@ -61,11 +63,11 @@ species_lists_by_group_dfs <- function (data_frame, group_name, groups=c(2,3,4,5
   all_groupings = list()
   for(grouping in groups){
     output_list = list()  # make an empty output list
-    field_name <- paste(group_name,"_KM",grouping,suffix, sep="")
+    field_name <- paste(group_name,"_",grouping,suffix, sep="")
     for(group in seq(1,grouping)){ # for each subgroup in this grouping
       records_in_group <- data_of_interest %>% dplyr::filter_(paste(field_name, "==", as.character(group)))  # filters to just the current group
 
-      records_in_group <- records_in_group[, -grep(".+KM.+", colnames(records_in_group))]  # drop columns for groupings
+      records_in_group <- records_in_group[, -grep(".+groups_.+", colnames(records_in_group))]  # drop columns for groupings
       gathered_data <- as.data.frame(records_in_group) %>% tidyr::gather(key="species", value="presence")
       found_species <- gathered_data %>% dplyr::filter(presence==1) %>% distinct(species)
       g_title <- paste("group_", group, sep="")
@@ -87,7 +89,7 @@ get_dominance_data  <- function(data_frame, group_name, groups=2:9, counts=FALSE
   st_geometry(data_frame) <- NULL # drop the SF geometry info
   group_dominance_data = data.frame(number_clusters=numeric(), value=numeric(), dominant_class=character())  # set it to NA to start - a function will create a data frame from it
   for(grouping in groups){
-    field_name <- paste(group_name,"_KM",grouping,suffix, sep="")
+    field_name <- paste(group_name,"_",grouping,suffix, sep="")
     group_dominance_data <- get_cluster_dominance_data(data_frame, field_name, grouping, group_dominance_data, counts=counts)  # pass in the whole DF with the extra fields - we need the HUC 12 field
   }
   return(group_dominance_data)
@@ -99,7 +101,7 @@ get_dominant_stream_class_by_hucs <- function(group_records, eflow_data=huc12_ef
   ## If counts is TRUE, then instead of proportion, it outputs the count as the "proportion_dominant", but
   ## it will still include the dominant class in the list output for symbolization
   
-  eflow_records <- eflow_data %>% filter(HUC12 %in% group_records$hucs_filtered_HUC_12)
+  eflow_records <- eflow_data %>% filter(HUC12 %in% group_records$huc_12_string)
   eflow_sums <- eflow_records %>% group_by(eflow_type) %>% summarise(group_sum = sum(eflow_length, na.rm=TRUE))
   max_record = which.max(eflow_sums$group_sum)
   proportion_dominant = eflow_sums[max_record,]$group_sum / sum(eflow_sums$group_sum)
@@ -136,7 +138,7 @@ get_cluster_dominance_data <- function(records, cluster_field, num_clusters, exi
 plot_dominance_gg <- function(dominance_data, title){
   
   # coloration via: https://stackoverflow.com/a/21146026/587938
-  new_plot <- ggplot(dominance_data, aes(number_clusters, value)) +
+  new_plot <- ggplot(dominance_data, aes(x=number_clusters, y=value)) +
               geom_point(mapping=aes(colour=dominant_class, size=5)) + 
               scale_colour_discrete(drop=TRUE, limits = levels(dominance_data$dominant_class)) +
               geom_smooth(method = "lm") +
@@ -156,22 +158,31 @@ print_dominance_plots <- function(species_info, region_name){
 ```
 
 
+## Overview and Basic Methods
+In this current version (June 2018) of the clustering, translocations were ignored, so clustering was done only on PISCES presence types 1 (observerd), 3 (expert opinion of extant range), and 9 (extirpated, but reintroduced). HUCs with taxa richness of less than 2 are also excluded as single species hucs may have their own specific rules. Clustering was done with Flow Sensitive Taxa.
+
+Clustering was done by a PISCES tool that subsets and formulates the data to be used by ArcGIS' Grouping Analysis tool, where prior versions were clustered through manual steps and then fed into GeoDa's K-Means tool.
+
+
 ## Map of Region Breakouts
 The region was broken out primarily into
-* Coast (North Coast->Santa Barbara)
-* Central Valley (anything draining out through the Central Valley - excludes Honey/Eagle Lakes)
-* Great Basin (anything in hydrologic region 16 in the northern part of the state, contiguous)
-* Desert (southern coast, including LA, and anything in the desert regions. Includes eastern sierra that is part of region 18, souther reaches of region 15 in the state, portion of Colorado River, and a small piece of region 16)
+ * North Coast (North Coast->San Francisco)
+ * South Coast (South of SF -> Southern California)
+ * Central Valley (anything draining out through the Central Valley - excludes Honey/Eagle Lakes and SF Bay)
+ * Great Basin (anything in hydrologic region 16 in the northern part of the state, contiguous)
+ * Desert - not clustered or shown here as previous clustering indicated single-species driven areas (Includes eastern sierra that is part of region 18, souther reaches of region 15 in the state, portion of Colorado River, and a small piece of region 16)
+
+The map below shows the areas that were actually included in clustering - in this case, that also means that areas with less than two taxa were removed.
 
 ```{r map of region breakouts, fig.height=12, fig.width=12,}
 
 writeLines("td, th { padding : 6px } th { background-color : #fff ; color : #000; border : 1px solid #333; } td { color : #000 ; border : 1px solid #333 }", con = "mystyle.css")  # add the CSS for the data tables
 
-flow_sense_data <- file.path("C:/Users/dsx/Code/eflow-species/data/clustering/groupings/flowsensitive_current.gpkg")
-region_data <- sf::st_as_sf(rgdal::readOGR(flow_sense_data, "flowsensitive_current", stringsAsFactors=FALSE))
+
+huc_data <- sf::st_as_sf(rgdal::readOGR(paste("data/report_update/clusters.gpkg", sep=""),"june_2018_clusters_v2", stringsAsFactors=FALSE))
 
 ggplot() + 
-  geom_sf(region_data, lwd = 5, mapping=aes(fill=huc_region_group), color=NA)+ 
+  geom_sf(huc_data, lwd = 5, mapping=aes(fill=huc_region_group), color=NA)+ 
   ggtitle("Region Breakout") + 
   theme_bw()+
   theme(panel.grid.major = element_line(colour = 'transparent'))+
@@ -187,8 +198,8 @@ ggplot() +
 ## Central Valley
 
 ```{r map central valley, fig.height=12, fig.width=12, results='asis'}
-cv_region_name = "centralvalley"
-cv_species_info <- species_maps(cv_region_name, "Central Valley")
+cv_region_name = "central_valley"
+cv_species_info <- species_maps(cv_region_name, "Central Valley", huc_data)
 cv_species_info$region_map  # print the map
 print_dominance_plots(cv_species_info, cv_region_name)
 cv_species_lists <- species_lists_by_group_dfs(cv_species_info$species_data, cv_region_name)  # species_info$species_data is the data frame for the region
@@ -205,8 +216,8 @@ for(df in cv_species_lists){
 ## Great Basin
 
 ```{r map great basin, fig.height=12, fig.width=12, results='asis'}
-gb_region_name = "greatbasin"
-gb_species_info <- species_maps(gb_region_name, "Great Basin")
+gb_region_name <- "great_basin"
+gb_species_info <- species_maps(gb_region_name, "Great Basin", huc_data)
 gb_species_info$region_map  # print the map
 print_dominance_plots(gb_species_info, gb_region_name)
 gb_species_lists <- species_lists_by_group_dfs(gb_species_info$species_data, gb_region_name)  # species_info$species_data is the data frame for the region
@@ -218,11 +229,11 @@ for(df in gb_species_lists){
 ```
 
 
-## Coast
+## North Coast
 
 ```{r map coast, fig.height=12, fig.width=12, results='asis'}
-coast_region_name = "coast"
-coast_species_info <- species_maps(coast_region_name, "Coast")
+coast_region_name = "north_coast"
+coast_species_info <- species_maps(coast_region_name, "North Coast", huc_data)
 coast_species_info$region_map  # print the map
 print_dominance_plots(coast_species_info, coast_region_name)
 coast_species_lists <- species_lists_by_group_dfs(coast_species_info$species_data, coast_region_name)  # species_info$species_data is the data frame for the region
@@ -233,16 +244,16 @@ for(df in coast_species_lists){
 
 ```
 
-## Desert
+## South Coast
 
 ```{r map Desert, fig.height=12, fig.width=12, results='asis'}
-desert_region_name = "desert"
-desert_species_info <- species_maps(desert_region_name, "Desert")
-desert_species_info$region_map  # print the map
-print_dominance_plots(desert_species_info, desert_region_name)
-desert_species_lists <- species_lists_by_group_dfs(desert_species_info$species_data, desert_region_name)  # species_info$species_data is the data frame for the region
+soco_region_name = "south_coast"
+soco_species_info <- species_maps(soco_region_name, "South Coast", huc_data)
+soco_species_info$region_map  # print the map
+print_dominance_plots(soco_species_info, soco_region_name)
+soco_species_lists <- species_lists_by_group_dfs(soco_species_info$species_data, soco_region_name)  # species_info$species_data is the data frame for the region
 
-for(df in desert_species_lists){
+for(df in soco_species_lists){
   show(knitr::kable(df, format="html"))
 }
 
@@ -255,7 +266,7 @@ for(df in desert_species_lists){
 ## NOTE THE EVAL=FALSE - this chunk won't run when knit - just for interactive work in meeting!
 # make coast info
 coast_region_name = "coast"
-coast_species_info <- species_maps(coast_region_name, "Coast")
+coast_species_info <- species_maps(coast_region_name, "Coast", huc_data)
 coast_species_info$region_map  # print the map
 group_data <- species_lists_by_group_dfs(coast_species_info$species_data, coast_region_name, counts=FALSE)  # species_info$species_data is the data frame for the region
 dominance_data <- group_data$dominance_data
