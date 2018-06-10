@@ -3,3 +3,7 @@
 .Rproj.user/*
 *.lock
 .Rproj.user
+.RDataTmp
+.RData
+.Rhistory
+data/report_update/working_scratch.gdb/*
