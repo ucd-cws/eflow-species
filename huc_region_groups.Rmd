@@ -23,7 +23,7 @@ default_num_groups <- c(3,4,5,6,7)
 huc12_eflow_percents <- read.csv("data/HUC12s_eflow_percent.csv", stringsAsFactors = FALSE)
 suffix<-"groups_num"
 
-huc_data <- sf::st_as_sf(rgdal::readOGR(paste("data/report_update/clusters.gpkg", sep=""),"june_2018_all_current_trans_3to7", stringsAsFactors=FALSE))
+huc_data <- sf::st_as_sf(rgdal::readOGR(paste("data/report_update/clusters.gpkg", sep=""),"june_2018_update_notrans_nomin_3to7", stringsAsFactors=FALSE))
 
 filter_data_to_group <- function (group_name, data){
   return(data %>% drop_na(paste(group_name,'_5groups_num', sep="")))    
@@ -168,7 +168,7 @@ print_dominance_plots <- function(species_info, region_name){
 
 
 ## Overview and Basic Methods
-In this \version (June 2018) of the clustering, translocations were*included*. All HUCs were included, regardless of the minimum number of taxa (includes ones with one or none). Clustering was done with Flow Sensitive Taxa.
+In this version (June 2018) of the clustering, translocations were _not_ included. All HUCs were included, regardless of the minimum number of taxa (includes ones with one or none). Clustering was done with Flow Sensitive Taxa.
 
 Clustering was done by a PISCES tool that subsets and formulates the data to be used by ArcGIS' Grouping Analysis tool, where prior versions were clustered through manual steps and then fed into GeoDa's K-Means tool.
 
@@ -252,7 +252,7 @@ for(df in coast_species_lists){
 
 ## South Coast
 
-```{r map Desert, fig.height=12, fig.width=12, results='asis'}
+```{r map South Coast, fig.height=12, fig.width=12, results='asis'}
 soco_region_name = "south_coast"
 soco_species_info <- species_maps(soco_region_name, "South Coast", huc_data)
 soco_species_info$region_map  # print the map
