@@ -1,5 +1,7 @@
 import PISCES
 
+## NOTE - this code is superceded by PISCES code that generates matrices and clusters thenm on its own
+
 PISCES.tbx_make_matrix.make_matrix("Anadromous", r"C:\Users\dsx\Projects\eflows_working\species_matrices", out_name="anadromous_current")
 PISCES.tbx_make_matrix.make_matrix("Wide_Ranging", r"C:\Users\dsx\Projects\eflows_working\species_matrices", out_name="Wide_Ranging_current")
 PISCES.tbx_make_matrix.make_matrix("Narrow_25", r"C:\Users\dsx\Projects\eflows_working\species_matrices", out_name="Narrow_25_current")
