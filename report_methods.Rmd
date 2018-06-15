@@ -117,7 +117,8 @@ species_lists_by_group_dfs <- function (data_frame, group_name, groups=default_n
       g_title <- paste("group_", group, sep="")
       #colnames(found_species) <- g_title  # assign it so that the data frame field has the right name before we merge it
       #found_species <- sort(found_species, na.last=TRUE)
-      output_list[[g_title]] = found_species$species  # add the group to the output list  
+      sorted_species <- sort(found_species$species)
+      output_list[[g_title]] = sorted_species  # add the group to the output list  
       
     }
     
@@ -497,7 +498,7 @@ for(df in gb_species_lists){
 
 ```{r map coast, fig.height=8, fig.width=8, results='asis'}
 coast_region_name = "north_coast"
-coast_species_info <- species_maps(coast_region_name, "North Coast", huc_data, inset_image=here("maps/north_coast_inset.png"),inset_x=1105, inset_y=1165)
+coast_species_info <- species_maps(coast_region_name, "North Coast", huc_data)#, inset_image=here("maps/north_coast_inset.png"),inset_x=1105, inset_y=1165)
 coast_species_info$region_map  # print the map
 print_dominance_plots(coast_species_info, coast_region_name)
 coast_species_lists <- species_lists_by_group_dfs(coast_species_info$species_data, coast_region_name)  # species_info$species_data is the data frame for the region
@@ -512,7 +513,7 @@ for(df in coast_species_lists){
 
 ```{r map South Coast, fig.height=8, fig.width=8, results='asis'}
 soco_region_name = "south_coast"
-soco_species_info <- species_maps(soco_region_name, "South Coast", huc_data, inset_image=here("maps/south_coast_inset.png"),inset_x=1235, inset_y=1005)
+soco_species_info <- species_maps(soco_region_name, "South Coast", huc_data)#, inset_image=here("maps/south_coast_inset.png"),inset_x=1235, inset_y=1005)
 soco_species_info$region_map  # print the map
 print_dominance_plots(soco_species_info, soco_region_name)
 soco_species_lists <- species_lists_by_group_dfs(soco_species_info$species_data, soco_region_name)  # species_info$species_data is the data frame for the region

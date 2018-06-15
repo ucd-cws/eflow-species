@@ -82,7 +82,8 @@ species_lists_by_group_dfs <- function (data_frame, group_name, groups=default_n
       g_title <- paste("group_", group, sep="")
       #colnames(found_species) <- g_title  # assign it so that the data frame field has the right name before we merge it
       #found_species <- sort(found_species, na.last=TRUE)
-      output_list[[g_title]] = found_species$species  # add the group to the output list  
+      sorted_species <- sort(found_species$species)
+      output_list[[g_title]] = sorted_species  # add the group to the output list  
       
     }
     
