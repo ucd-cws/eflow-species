@@ -1,0 +1,92 @@
+---
+title: "Meeting Notes 7/16/2018"
+author: "Nick Santos"
+date: "July 16, 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Meeting Notes - 07-16-2018
+
+## Topics
+* Fish analysis/grouping (closure? hahhaa)
+* Next steps for fish analysis
+* Statewide data + stats analysis (questions to answer, products/"answers")
+* <wastewater project>
+* aug 7 mtg, ISE
+* Postdoc positions
+* Tier 2 first steps - tasks, logistics, status
+
+
+## Fish Analysis/grouping
+Context: chicken and egg problem.
+Goal: Try to come up with regional fish assemblages that cluster the fish on the landscape
+
+Larry: Conceptually the plan makes sense, but the issue is that certain species dominate the cluster on the basis of a small geographic area.
+
+Eric: Assess the clusters relative to a set of physical or watershed processes.
+
+XX Should we make a model that relates clusters to landscape processes? What's the fastest way for us to rerun that as clusters change? Can we use coarse landscape metrics here safely?
+
+What we want to do: Go to specific places and determine which species/groups someone might want to prioritize from a functional flows standpoint
+
+Do we need to not split levels of HUC aggregation down to HUC10 or HUC8? 
+
+Can we solve some of this with smart decision support tools that show assemblages and species presence at multiple scales? That is, show the cluster species assemblages as well as the local huc_12 assemblage.
+
+Fundamental questions:
+* What species or assemblages are associated with this area
+* What species or assemblages *would* be associated with this area under natural conditions.
+
+XX Question again - can we collapse subspecies into species and run clustering again? Should we run based on life-history needs?
+
+XX Suggestion - do clustering as a point of discussion, then bring experts together.
+
+Do a dissimilarity analysis between assemblages in different regions. Are there differences in flow characteristics associated with different assemblages. Flow characteristics in lit review. Broadly, yes, specifically no. "Floodplain fish". Pair each species with priority flow components - that exists in esxisting lit review.
+
+Socal is going to have lower richness, which makes index development, clustering, etc harder down there. How do 
+
+XX Mask out the Delta, including any areas with Delta Smelt before clustering - intersect delta boundary with hucs, remove hucs entirely, verify that we're removing only what we want
+
+Include current and historical species lists for management.
+
+XX Make new flow sensitive species list.
+
+Full statewide clusters
+* click on a huc 12, get:
+  * current huc_12 assemblage
+  * historical huc_12 assemblage
+  * cluster assemblage ("regional flow-sensitive fish assemblage")
+
+When we start adjusting flow regimes, are we creating invasive species habitat - how do we assess invasives as part of this?
+
+When we cluster additional taxa, do we create new clusters per species group (herps, fish, algae, bugs), or do we create one big new clustering with all
+taxa/species grouping
+
+## Next Steps
+ * Assemble regional expert groups
+   * Cam Swift
+   * John Baskin
+   * Peter Moyle
+   * Jerry Smith
+   * Tom Taylor
+   * Larry Brown
+   * Brett Harvey
+   * Lisa Thompson
+ * Rerun clustering:
+   * Species level, not subspecies
+   * Remove Delta
+   * Dissimilarities within and between regions
+   * Vett/Check flow sensitive group
+ * When decided on cluster:
+   * Make map that displays all clusters ("regional flow sensitive fish assemblage")
+   * When click on it, it shows:
+     * species in huc, species in cluster, historical flow sensitive
+     * Send to experts and ask them if species need to be moved between groups
+     * Ask experts to check the flow sensitive list
+  * Determine taxonomic classes to include from Aquarius (Herps (re), Mollusk)/CSCI for bugs/PISCES.
+  * For plants, skip for now.
+  * Bugs are next - let's use BRT or Random Forests to determine which environmental characteristics are associated with these species.
