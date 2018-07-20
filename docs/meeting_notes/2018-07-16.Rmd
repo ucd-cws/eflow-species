@@ -90,3 +90,30 @@ taxa/species grouping
   * Determine taxonomic classes to include from Aquarius (Herps (re), Mollusk)/CSCI for bugs/PISCES.
   * For plants, skip for now.
   * Bugs are next - let's use BRT or Random Forests to determine which environmental characteristics are associated with these species.
+
+## All items
+ * overlay stream classes (vet stream classes - Nick, Sarah, Alyssa establish a set of rules and then manually confirm)
+ * flow components - association, geomorph (later), broad qualitation
+ * functional flow metrics with O:E - BRTs, Random forests, logistic regression
+ * one spp - one metric test - regressions
+  
+## Inverts
+### Statewide
+ * QA class vs. CSCI score
+ * delta H <--> O:E (Index) at gaged sites based on ff metrics (need Obs.?)
+   * develop flow ecology curves, statewide and by stream class
+ * assess relative importance of FF mtrics in class w/BRTs
+ * MMI: multi-metric index (functional feeding groups, tc)
+ * more flow sensitive, perhaps
+ 
+## Lit review / data synthesis
+ * Other local datasets - flow-eco, flow-habitat relations
+   * gray literature
+   * CDFW data
+ * eflows methods review
+ * adaptive management
+ * monitoring
+ 
+ 
+### Needs
+Can we establish a set of rules for validating the stream classification.
