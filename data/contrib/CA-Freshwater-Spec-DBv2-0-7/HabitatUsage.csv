@@ -1,0 +1,10 @@
+OBJECTID,HabU_ID,HabU_Name
+1,0,Undefined
+2,1,Spawning
+3,2,Migration 
+4,3,Natal (juvenile)
+5,4,Non-natal (adult)
+6,5,Seasonal
+7,6,Breeding
+8,7,Wintering
+9,8,Year-round

@@ -1,0 +1,11 @@
+OBJECTID,ObsTyp_ID,ObsTyp_Name
+1,0,Unknown
+2,1,Current observations (post 1980)
+3,2,Modeled habitat/ generalized observation
+4,3,Range (current or unknown)
+5,4,Observation with undefined date
+6,5,Historical range
+7,6,Professional judgement
+8,7,Critical habitat/ management area designations
+9,8,Historical observation (pre 1980)
+10,9,Extirpated
