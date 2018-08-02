@@ -35,7 +35,7 @@ species_maps <-function(groupname, title, region_data){
   
       # now, we need to convert the attributes we're using for groupings into a single column so that GGPlot can do our mapping for us with facets
       # paste(groupname,"_2",suffix, sep=""),paste(groupname,"_8",suffix, sep=""),paste(groupname,"_9",suffix, sep=""), paste(groupname,"_3",suffix, sep=""),paste(groupname,"_4",suffix, sep=""),paste(groupname,"_5",suffix, sep=""),paste(groupname,"_6",suffix, sep=""),
-      huc_data_mapping <- huc_data %>% gather(key=model_run, value=grouping, paste(groupname,"_7",suffix, sep=""),paste(groupname,"_8",suffix, sep=""),paste(groupname,"_9",suffix, sep=""),paste(groupname,"_10",suffix, sep=""))
+      huc_data_mapping <- huc_data %>% gather(key=model_run, value=grouping, paste(groupname,"_4",suffix, sep=""),paste(groupname,"_5",suffix, sep=""),paste(groupname,"_6",suffix, sep=""),paste(groupname,"_7",suffix, sep=""),paste(groupname,"_8",suffix, sep=""))
       
       plot <- ggplot() + 
         geom_sf(huc_data_mapping, lwd = 5, mapping=aes(fill=factor(grouping)), color=NA)+

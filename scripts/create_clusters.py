@@ -19,3 +19,13 @@ class TestTools(unittest.TestCase):
 												
 if __name__ == "__main__":  # if this script is being run as the main script and isn't imported somewhere
 	unittest.main()
+
+
+# 		tbx_make_clusters.make_species_clusters(
+# 			os.path.join(eflows_folder, r"data\report_update\working_scratch.gdb\june_2018_current_notrans_neighbors_7to10"),
+# 												presence_values="1,3,9",
+# 												min_species=0,
+# 												num_groups=(4, 5, 6, 7),
+# 												huc_regions=os.path.join(eflows_folder, r"data\report_update\regions.gdb\regions_without_desert"),
+# 												region_group_field="huc_region_group",
+# 												spatial_constraint="CONTIGUITY_EDGES_CORNERS")

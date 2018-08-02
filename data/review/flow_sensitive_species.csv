@@ -1,0 +1,341 @@
+fid,common_name,flow_sensitive,native_fish
+CRO06,Amargosa Canyon speckled dace,0,1
+CCN02,Amargosa River pupfish,0,1
+CGO01,Arroyo chub,1,1
+CCK01,Bigeye marbled sculpin,1,1
+CGC01,Blue chub,1,1
+CGE01,Bonytail,0,1
+SSC01,Bull trout,0,1
+SOT04,California Coast fall Chinook salmon,1,1
+SOM14,California golden trout,0,1
+CFP01,California killifish,0,1
+CLS01,California roach,1,1
+SOM05,Central California coast winter steelhead,1,1
+SOK01,Central Coast coho salmon,1,1
+SOT08,Central Valley fall Chinook salmon,1,1
+SOT07,Central Valley late fall Chinook salmon,1,1
+SOT06,Central Valley spring Chinook salmon,1,1
+SOM06,Central Valley steelhead,0,1
+SOT05,Central Valley winter Chinook salmon,1,1
+SOK03,Chum salmon,0,1
+CLE02,Clear Lake hitch,0,1
+CCA03,Clear Lake prickly sculpin,0,1
+CLS04,Clear Lake roach,0,1
+CPC01,Clear Lake splittail,0,1
+EHT03,Clear Lake tule perch,0,1
+SOC01,Coastal cutthroat trout,0,1
+SOM09,Coastal rainbow trout,0,1
+GGA01,Coastal threespine stickleback,0,1
+CCA04,Coastrange sculpin,0,1
+CPL01,Colorado pikeminnow,0,1
+CCS04,Cottonball Marsh pupfish,0,1
+CST03,Cow Head tui chub,0,1
+OHP01,Delta smelt,1,1
+CCM02,Desert pupfish,1,1
+SOM12,Eagle Lake rainbow trout,0,1
+CSB05,Eagle Lake tui chub,0,1
+OTP01,Eulachon,0,1
+CCL02,Flannelmouth sucker,0,1
+PET02,Goose Lake lamprey,0,1
+SOM11,Goose Lake redband trout,0,1
+CCO02,Goose Lake sucker,0,1
+CST01,Goose Lake tui chub,0,1
+CLP01,Gualala roach,0,1
+CMC01,Hardhead,1,1
+CSB02,High Rock Springs tui chub,0,1
+CCO04,Humboldt sucker,0,1
+GGA02,Inland threespine stickleback,1,1
+CLS09,Kaweah roach,1,1
+SOM13,Kern River rainbow trout,1,1
+PLH01,Kern brook lamprey,1,1
+SOM04,Klamath Mountains Province summer steelhead,1,1
+SOM03,Klamath Mountains Province winter steelhead,1,1
+PES01,Klamath River lamprey,1,1
+CCS01,Klamath largescale sucker,1,1
+CCR01,Klamath smallscale sucker,0,1
+CRO03,Klamath speckled dace,0,1
+CSB01,Klamath tui chub,0,1
+SOC03,Lahontan cutthroat trout,1,1
+CSB03,Lahontan lake tui chub,0,1
+CCP01,Lahontan mountain sucker,1,1
+CRE01,Lahontan redside,0,1
+CRO02,Lahontan speckled dace,1,1
+CSB04,Lahontan stream tui chub,0,1
+SOM15,Little Kern golden trout,0,1
+CRO05,Long Valley speckled dace,0,1
+OST01,Longfin smelt,1,1
+CCL01,Lost River sucker,1,1
+CCK02,Lower Klamath marbled sculpin,1,1
+SOM10,McCloud River redband trout,0,1
+CCM01,Modoc sucker,1,1
+CSM01,Mojave tui chub,0,1
+CLE03,Monterey hitch,1,1
+CCO03,Monterey sucker,1,1
+SPW01,Mountain whitefish,1,1
+CLS06,Navarro roach,0,1
+PEF01,Northern California brook lamprey,0,1
+SOM02,Northern California coast summer steelhead,1,1
+SOM01,Northern California coast winter steelhead,1,1
+CLS03,Northern coastal roach,0,1
+AAM01,Northern green sturgeon,1,1
+CLS08,Northern roach,1,1
+CCR02,Owens pupfish,1,1
+CRO04,Owens speckled dace,1,1
+CCF01,Owens sucker,0,1
+CSB06,Owens tui chub,1,1
+PET01,Pacific lamprey,1,1
+SOC02,Paiute cutthroat trout,0,1
+CCB02,Paiute sculpin,0,1
+SOG01,Pink salmon,0,1
+CST02,Pit River tui chub,0,1
+CCP02,Pit sculpin,1,1
+PLL01,Pit-Klamath brook lamprey,0,1
+CCA02,Prickly sculpin,0,1
+CXT01,Razorback sucker,1,1
+CLS02,Red Hills roach,1,1
+CCP03,Reticulate sculpin,0,1
+CCG01,Riffle sculpin,1,1
+PLA01,River lamprey,1,1
+CCA01,Rough sculpin,0,1
+EHT02,Russian River tule perch,0,1
+COM01,Sacramento blackfish,0,1
+CLE01,Sacramento hitch,1,1
+CAI01,Sacramento perch,1,1
+CPG01,Sacramento pikeminnow,1,1
+CRO01,Sacramento speckled dace,1,1
+CPM01,Sacramento splittail,1,1
+CCO01,Sacramento sucker,1,1
+EHT01,Sacramento tule perch,1,1
+CCS03,Salt Creek pupfish,0,1
+CRO07,Santa Ana speckled dace,1,1
+CCS02,Santa Ana sucker,1,1
+CCN01,Saratoga Springs pupfish,0,1
+GGA04,Shay Creek stickleback,0,1
+CCB01,Shortnose sucker,1,1
+CCN04,Shoshone pupfish,0,1
+SOM07,South Central California coast steelhead,1,1
+SOM08,Southern California steelhead,1,1
+SOK02,Southern Oregon Northern California coast coho salmon,1,1
+SOT03,Southern Oregon Northern California coast fall Chinook salmon,0,1
+CLS05,Southern coastal roach,1,1
+AAM02,Southern green sturgeon,1,1
+CLA01,Staghorn sculpin,0,1
+PPS01,Starry flounder,0,1
+MMC02,Striped mullet,0,1
+CCT01,Tahoe sucker,0,1
+CCN03,Tecopa pupfish,0,1
+CSC01,Thicktail chub,0,1
+GEN01,Tidewater goby,1,1
+CLS07,Tomales roach,1,1
+GGA03,Unarmored threespine stickleback,1,1
+CCK03,Upper Klamath marbled sculpin,1,1
+SOT01,Upper Klamath-Trinity fall Chinook salmon,1,1
+SOT02,Upper Klamath-Trinity spring Chinook salmon,1,1
+PLR01,Western brook lamprey,1,1
+AAT01,White sturgeon,1,1
+PXL01,African Clawed Frog,0,0
+AME01,Ameletidae family,0,0
+RLC01,American Bullfrog,0,0
+CAS01,American Shad,0,0
+AMP01,Amphizoidae family,0,0
+ANI01,Anisogammaridae family,0,0
+APA01,Apataniidae family,0,0
+CTA01,Aquatic gartersnake,0,0
+STA01,Arctic grayling,0,0
+RCB01,Argentine pearlfish,0,0
+GCI01,Arrow goby,0,0
+BAC02,Arroyo Toad,0,0
+ASE01,Asellidae family,0,0
+AST01,Astacidae family,0,0
+ATH01,Athericidae family,0,0
+ATY01,Atyidae family,0,0
+HPH01,Baja California Treefrog,0,0
+SSA01,Barred Pipefish,0,0
+CIC01,Bigmouth buffalo,0,0
+PPM01,Bigscale logperch,0,0
+IAM01,Black bullhead,0,0
+CPN01,Black crappie,0,0
+BAE01,Black toad,0,0
+COM02,Blackfish (bin),0,0
+BLE01,Blephariceridae family,0,0
+IIF01,Blue catfish,0,0
+FLG01,Bluefin killifish,0,0
+CLM02,Bluegill,0,0
+BRA01,Brachycentridae family,0,0
+SSF01,Brook Trout,0,0
+GCI02,Brook stickleback,0,0
+SST01,Brown Trout,0,0
+IAN02,Brown bullhead,0,0
+CAL01,Calamoceratidae family,0,0
+BAB02,California Toad,0,0
+DDE01,California giant salamander,0,0
+PPC01,California halibut,0,0
+STT01,California newt,0,0
+RRD01,California red-legged frog,0,0
+AAC01,California tiger salamander,0,0
+COM03,California tilapia (hybrid),0,0
+HPC01,California tree frog,0,0
+CAP01,Capniidae family,0,0
+RRC01,Cascades frog,0,0
+GTT01,Chameleon goby,0,0
+IIP01,Channel catfish,0,0
+CTM01,Checkered gartersnake,0,0
+SOT09,Chinook Salmon (bin),0,0
+CHI01,Chirocephalidae family,0,0
+CHL01,Chloroperlidae family,0,0
+SSC02,Coastal dolly varden,0,0
+DDT01,Coastal giant salamander,0,0
+AAT02,Coastal tailed frog,0,0
+SOK04,Coho (bin),0,0
+SOC05,Colorado River cutthroat trout,0,0
+CLG03,Common Kingsnake,0,0
+CCC01,Common carp,0,0
+CTS01,Common gartersnake,0,0
+COR01,Cordulegastridae family,0,0
+COR02,Corduliidae family,0,0
+COR03,Corydalidae family,0,0
+SSC04,Couch's spadefoot toad,0,0
+CRA01,Crangonyctidae family,0,0
+SOC04,Cutthroat trout (bin),0,0
+PPE01,Del Norte Salamander,0,0
+DEU01,Deuterophlebiidae family,0,0
+PPG01,Diamond turbot,0,0
+DIX01,Dixidae family,0,0
+SSC03,Dolly varden,0,0
+PPD01,Dunn's salamander,0,0
+ELM01,Elmidae family,0,0
+CHS01,Empty data bin - California roach,0,0
+EPH01,Ephemerellidae family,0,0
+EUL01,Eulichadidae family,0,0
+CPP01,Fathead minnow,0,0
+IPO01,Flathead Catfish,0,0
+RRB01,Foothill yellow-legged frog,0,0
+CTG01,Giant gartersnake,0,0
+GLO01,Glossosomatidae family,0,0
+GOE01,Goeridae family,0,0
+CNC01,Golden shiner,0,0
+CCA05,Goldfish,0,0
+CCI01,Grass carp,0,0
+SSI01,Great Basin spadefoot,0,0
+BAC03,Great Plains toad,0,0
+CLC01,Green sunfish,0,0
+PXH01,Green swordtail,0,0
+PPR01,Guppy,0,0
+HEL01,Helicopsychidae family,0,0
+HEP01,Heptageniidae family,0,0
+CLE04,Hitch (bin),0,0
+HYD01,Hydrobiidae family,0,0
+MMB01,Inland silverside,0,0
+PBC01,Inyo Mountains salamander,0,0
+ISO01,Isonychiidae family,0,0
+CCP04,Klamath lake sculpin,0,0
+SSN01,Lake trout,0,0
+CMS01,Largemouth Bass,0,0
+LEP01,Lepidostomatidae family,0,0
+LEU01,Leuctridae family,0,0
+LIM01,Limnephilidae family,0,0
+AAM03,Long-toed Salamander,0,0
+GGM01,Longjaw mudsucker,0,0
+GCS01,Longtail goby,0,0
+LUT01,Lutrochidae family,0,0
+LYM01,Lymnaeidae family,0,0
+MAC01,Macromiidae family,0,0
+CCK04,Marbled Sculpin (bin),0,0
+MAR01,Margaritiferidae family,0,0
+MMB02,Mississippi silversides,0,0
+NEM01,Nemouridae family,0,0
+AEC01,Northern Alligator Lizard,0,0
+RRP01,Northern leopard frog,0,0
+RRA01,Northern red-legged frog,0,0
+CTO01,Northwestern gartersnake,0,0
+AAG01,Northwestern salamander,0,0
+ODO01,Odontoceridae family,0,0
+RRP02,Oregon spotted frog,0,0
+PLP01,Pacific brook lamprey,0,0
+HPR01,Pacific chorus frog,0,0
+CCH01,Pacific herring,0,0
+PEL01,Peltoperlidae family,0,0
+PER01,Perlidae family,0,0
+PER02,Perlodidae family,0,0
+PET03,Petaluridae family,0,0
+PHI01,Philopotamidae family,0,0
+PHR01,Phryganeidae family,0,0
+PLE01,Pleuroceridae family,0,0
+PPG02,Porthole livebearer,0,0
+PSY01,Psychomyiidae family,0,0
+PTE01,Pteronarcyidae family,0,0
+PTI01,Ptilodactylidae family,0,0
+CLG01,Pumpkinseed,0,0
+SOM17,Rainbow Trout (Summer Steelhead),0,0
+SOM18,Rainbow Trout (Winter Steelhead),0,0
+FLP01,Rainwater killifish ,0,0
+CCL03,Red shiner,0,0
+STR01,Red-bellied newt,0,0
+BAP01,Red-spotted toad,0,0
+SOM16,Redband trout (bin),0,0
+CTZ01,Redbelly tilapia,0,0
+CLM03,Redear sunfish,0,0
+CMC02,Redeye bass,0,0
+RHY01,Rhyacophilidae family,0,0
+STG01,Rough-skinned newt,0,0
+PPL01,Sailfin molly,0,0
+CTS02,San Francisco Gartersnake,0,0
+PAN01,Santa Cruz Black Salamander,0,0
+AAM04,Santa Cruz long-toed Salamander,0,0
+SCI01,Scirtidae family,0,0
+CCX01,Sculpin spp (bin),0,0
+SER01,Sericostomatidae family,0,0
+CCA06,Sharpnose sculpin,0,0
+PAI01,Shasta Black Salamander,0,0
+GTB01,Shimofuri goby,0,0
+ECA01,Shiner perch,0,0
+SCP01,Shortfin corvina,0,0
+PPM02,Shortfin molly,0,0
+RRM01,Sierra Madre yellow-legged frog,0,0
+RRS01,Sierra Nevada yellow-legged frog,0,0
+CTC01,Sierra gartersnake,0,0
+STS01,Sierra newt,0,0
+HPS01,Sierran Treefrog,0,0
+PPS02,Siskiyou Mountains Salamander,0,0
+CCT02,Slender sculpin,0,0
+CMD01,Smallmouth Bass,0,0
+SON01,Sockeye (Kokanee) Salmon,0,0
+CTS03,South Coast Gartersnake,0,0
+AEC02,Southern Alligator Lizard,0,0
+RRV01,Southern torrent salamander,0,0
+PAF01,Speckled Black Salamander,0,0
+CRO08,Speckled Dace (bin),0,0
+SPH01,Sphaeriidae family,0,0
+CMP01,Spotted bass,0,0
+SOM19,Stocked Rainbow Trout (bin),0,0
+MMS01,Striped bass,0,0
+OHP02,Surf smelt,0,0
+TAE01,Taeniopterygidae family,0,0
+TAN01,Tanyderidae family,0,0
+CTT01,Tench,0,0
+CDP01,Threadfin shad,0,0
+GGA05,Threespine stickleback (bin),0,0
+AAA01,Topsmelt,0,0
+CSB07,Tui chub bin,0,0
+EHT04,Tule perch (bin),0,0
+CTH01,Twp-striped gartersnake,0,0
+UEN01,Uenoidae family,0,0
+UNI01,Unionidae family,0,0
+OHN01,Wakasagi,0,0
+PAV01,Wandering Salamander,0,0
+CLG02,Warmouth,0,0
+EAM01,Western Pond Turtle,0,0
+PGA01,Western mosquitofish,0,0
+EEM01,Western pond turtle,0,0
+SSH01,Western spadefoot toad,0,0
+CTE01,Western terrestrial gartersnake,0,0
+BAB01,Western toad,0,0
+MMC01,White bass,0,0
+IAC01,White catfish,0,0
+CPA01,White crappie,0,0
+BAW01,Woodhouse's toad,0,0
+IAN01,Yellow bullhead,0,0
+PPF01,Yellow perch,0,0
+GAF01,Yellowfin goby,0,0
+BAC01,Yosemite Toad,0,0
+ZZZ01,temp,0,0
