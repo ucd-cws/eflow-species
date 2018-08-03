@@ -1,7 +1,9 @@
 import os
 
-from PISCES import tbx_make_clusters
 import arcpy
+
+from PISCES import tbx_make_clusters
+import arcpy_metadata
 
 eflows_folder = os.path.split(os.path.split(os.path.abspath(__file__))[0])[0]  # get the parent folder on any machine, which is the main eflows folder.r
 
@@ -15,12 +17,18 @@ eflows_folder = os.path.split(os.path.split(os.path.abspath(__file__))[0])[0]  #
 # 1,7 == observed (we have a record in hand from someone who saw it)
 # 1,3,6,7,9 == all currently present, including translocations
 
-arcpy.env.randomGenerator = "ACM599"
-tbx_make_clusters.make_species_clusters(output_path=os.path.join(eflows_folder, r"data\report_update\working_scratch.gdb\june_2018_current_notrans_neighbors_7to10"),
+delta_practice = os.path.join(eflows_folder, r"data\report_update\scratch.gdb\delta_practice")
+
+tbx_make_clusters.make_species_clusters(output_path=delta_practice,
 										group_name="Flow_Sensitive",
 										presence_values="1,3,9", # current presence without translocations
 										min_species=0,
 										num_groups=(4, 5, 6, 7),
-										huc_regions=os.path.join(eflows_folder, r"data\report_update\regions.gdb\regions_without_desert"),
+										huc_regions=os.path.join(eflows_folder, r"data\report_update\regions_new.gdb\regions_wo_desert_delta"),
 										region_group_field="huc_region_group",
 										spatial_constraint="CONTIGUITY_EDGES_CORNERS")
+
+
+metadata = arcpy_metadata.MetadataEditor(delta_practice)
+metadata.purpose.set("Clustering of flow sensitive species for Pisces present values 1,3,9 using spatial constraint contiguity edges corners. New clustering run to remove Delta per group meeting. Ran by Alyssa 8/2/18")
+metadata.finish()
