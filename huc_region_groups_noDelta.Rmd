@@ -1,10 +1,10 @@
 ---
 title: "Eflows Species Clustering in CA Regions"
 output:
-  pdf_document: default
   html_document:
     css: mystyle.css
     df_print: paged
+  pdf_document: default
 ---
 
 ```{r setup, echo=FALSE, include=FALSE}
@@ -171,7 +171,7 @@ print_dominance_plots <- function(species_info, region_name){
 
 
 ## Overview and Basic Methods
-In this version (June 2018) of the clustering, translocations were _not_ included. Clusters must be contiguous in this version, as determined by a shared boundary or vertex, not by hydrologic connectivity. All HUCs were included, regardless of the minimum number of taxa (includes ones with one or none). Clustering was done with Flow Sensitive Taxa.
+In this version (June 2018) of the clustering, translocations were _not_ included. Clusters must be contiguous in this version, as determined by a shared boundary or vertex, not by hydrologic connectivity. All HUCs were included except for those within the legal Delta, regardless of the minimum number of taxa (includes ones with one or none). Clustering was done with Flow Sensitive Taxa.
 
 Clustering was done by a PISCES tool that subsets and formulates the data to be used by ArcGIS' Grouping Analysis tool, where prior versions were clustered through manual steps and then fed into GeoDa's K-Means tool.
 
