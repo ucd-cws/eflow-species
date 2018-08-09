@@ -17,7 +17,7 @@ eflows_folder = os.path.split(os.path.split(os.path.abspath(__file__))[0])[0]  #
 # 1,7 == observed (we have a record in hand from someone who saw it)
 # 1,3,6,7,9 == all currently present, including translocations
 
-delta_practice = os.path.join(eflows_folder, r"data\report_update\scratch.gdb\delta_practice")
+delta_practice = os.path.join(eflows_folder, r"data\report_update\scratch.gdb\aug_2019_nodelta")
 
 tbx_make_clusters.make_species_clusters(output_path=delta_practice,
 										group_name="Flow_Sensitive",
