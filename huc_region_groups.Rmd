@@ -23,7 +23,7 @@ default_num_groups <- c(3,4,5,6,7,8)
 huc12_eflow_percents <- read.csv("data/HUC12s_eflow_percent.csv", stringsAsFactors = FALSE)
 suffix<-"groups_num"
 
-huc_data <- sf::st_as_sf(rgdal::readOGR(paste("data/phase2/cluster_genus_level.gpkg", sep=""),"genus_flowsens_eto8_notrans_nodelta", stringsAsFactors=FALSE))
+huc_data <- sf::st_as_sf(rgdal::readOGR(paste("data/phase2/cluster_family_level.gpkg", sep=""),"family_flowsens_3to8_notrans_nodelta", stringsAsFactors=FALSE))
 
 filter_data_to_group <- function (group_name, data){
   return(data %>% drop_na(paste(group_name,'_7groups_num', sep="")))    
