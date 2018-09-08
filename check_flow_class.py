@@ -101,12 +101,20 @@ if __name__ == "__main__":  # if this is the main script and hasn't been importe
 	# now we have all the data in a structure we can traverse
 
 	print("Checking segments based on flow class values")
+	checked_items = 0
 	for comid in nhd_segments: # now it's time to evaluate - currently just handles the downstream check, not the length check
+		checked_items += 1
+		if checked_items % 10000 == 0:  # every time we evaluate 10k items
+			print(checked_items)
+
 		flow_class = nhd_segments[comid].flow_class
 		try:
 			downstream_flow_class = nhd_segments[comid].downstream.flow_class
 		except ValueError as e:
-			print(e)
+			nhd_segments[comid].flag_status = "flagged"
+			nhd_segments[comid].flag_code = "network_issue"
+			nhd_segments[comid].flag_description = "The status of this segment was unable to be evaluated due to coding or incorrect network information - error raised was \"{}\"".format(str(e))
+
 			continue
 
 		if not downstream_is_valid(upstream_class=flow_class, downstream_class=downstream_flow_class):
@@ -115,6 +123,7 @@ if __name__ == "__main__":  # if this is the main script and hasn't been importe
 			nhd_segments[comid].downstream.flag_description = "Flow class of {} is not in the accepted downstream flow classes for flow class {} from upstream COMID {}".format(downstream_flow_class, flow_class, comid)
 		else:
 			nhd_segments[comid].downstream.flag_status = "checked"
+
 
 	print("Writing Results")
 	# time to write it out
