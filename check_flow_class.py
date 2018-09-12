@@ -31,7 +31,7 @@ valid_downstreams = {
 	"GW": ["SM", "HSR", "LSR", "GW", "PGR", "RGW", "HLP"],
 	"PGR": ["HSR", "LSR", "GW", "PGR", "RGW"],
 	"FER": ["SM", "HSR", "LSR", "WS", "GW", "PGR", "FER", "RGW", "HLP"],
-	"RGW": ["HSR", "LSR", "GW", "PGR", "RGW"],
+	"RGW": ["HSR", "LSR", "WS", "GW", "PGR", "RGW"],
 	"HLP": ["SM", "HSR", "LSR", "GW", "HLP"],
 }
 
@@ -114,7 +114,6 @@ if __name__ == "__main__":  # if this is the main script and hasn't been importe
 			nhd_segments[comid].flag_status = "flagged"
 			nhd_segments[comid].flag_code = "network_issue"
 			nhd_segments[comid].flag_description = "The status of this segment was unable to be evaluated due to coding or incorrect network information - error raised was \"{}\"".format(str(e))
-
 			continue
 
 		if not downstream_is_valid(upstream_class=flow_class, downstream_class=downstream_flow_class):
