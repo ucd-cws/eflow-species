@@ -21,10 +21,17 @@ huc_data <- sf::st_as_sf(rgdal::readOGR(paste("~/GitHub/eflow-species/data/phase
 ```
 
 ## Dissimilarity Analysis for Regions Used in Clustering
-We performed a multiple component analysis for the four geographic regions in California used for clustering: Central Valley, Great Basin, North Coast and South Coast, to evaluate differences in fish species presence within the four regions.
+We performed a multiple correspondence analysis for the four geographic regions in California used for clustering to evaluate differences in flow sensitive fish assemblages between regions.
 
 ## Map of Regions 
-The regions were broken out into:  * North Coast (North Coast->San Francisco)  * South Coast (South of SF -> Southern California)  * Central Valley (anything draining out through the Central Valley - excludes Honey/Eagle Lakes and SF Bay)  * Great Basin (anything in hydrologic region 16 in the northern part of the state, contiguous)  * Desert - not clustered or shown here as previous clustering indicated single-species driven areas (Includes eastern sierra that is part of region 18, souther reaches of region 15 in the state, portion of Colorado River, and a small piece of region 16). See **eflow-species\huc_region_groups.Rmd** for more information on geographic boundaries of the regions. 
+The regions were broken out into:  
+* North Coast (North Coast->San Francisco)  
+* South Coast (South of SF -> Southern California)  
+* Central Valley (anything draining out through the Central Valley - excludes Honey/Eagle Lakes and SF Bay)  
+* Great Basin (anything in hydrologic region 16 in the northern part of the state, contiguous)  
+* Desert - not clustered or shown here as previous clustering indicated single-species driven areas (Includes eastern sierra that is part of region 18, souther reaches of region 15 in the state, portion of Colorado River, and a small piece of region 16).   
+
+The Delta was removed from this analysis. See <i> eflow-species\huc_region_groups.Rmd </i> for more information on geographic boundaries of the regions. 
 
 
 ```{r, echo = FALSE, fig.height=12, fig.width=12,}
