@@ -18,12 +18,12 @@ library(dplyr)
 
 group_palette <- c('#a6cee3','#1f78b4','#b2df8a','#33a02c','#fb9a99','#e31a1c','#fdbf6f','#ff7f00','#cab2d6','#6a3d9a')
 
-default_num_groups <- c(3,4,5,6,7,8)
+default_num_groups <- c(2,3,4,5,6,7,8)
 
 huc12_eflow_percents <- read.csv("data/HUC12s_eflow_percent.csv", stringsAsFactors = FALSE)
 suffix<-"groups_num"
 
-huc_data <- sf::st_as_sf(rgdal::readOGR(paste("data/phase2/cluster_family_level.gpkg", sep=""),"family_flowsens_3to8_notrans_nodelta", stringsAsFactors=FALSE))
+huc_data <- sf::st_as_sf(rgdal::readOGR(paste("data/phase2/cluster_species_level_refined.gpkg", sep=""),"nodelta_noempty_species_refined_2018_09_11", stringsAsFactors=FALSE))
 
 filter_data_to_group <- function (group_name, data){
   return(data %>% drop_na(paste(group_name,'_7groups_num', sep="")))    
@@ -35,7 +35,7 @@ species_maps <-function(groupname, title, region_data){
   
       # now, we need to convert the attributes we're using for groupings into a single column so that GGPlot can do our mapping for us with facets
       # paste(groupname,"_2",suffix, sep=""),paste(groupname,"_8",suffix, sep=""),paste(groupname,"_9",suffix, sep=""), paste(groupname,"_3",suffix, sep=""),paste(groupname,"_4",suffix, sep=""),paste(groupname,"_5",suffix, sep=""),paste(groupname,"_6",suffix, sep=""),
-      huc_data_mapping <- huc_data %>% gather(key=model_run, value=grouping, paste(groupname,"_3",suffix, sep=""), paste(groupname,"_4",suffix, sep=""),paste(groupname,"_5",suffix, sep=""),paste(groupname,"_6",suffix, sep=""),paste(groupname,"_7",suffix, sep=""), paste(groupname,"_8",suffix, sep=""))
+      huc_data_mapping <- huc_data %>% gather(key=model_run, value=grouping, paste(groupname,"_2",suffix, sep=""), paste(groupname,"_3",suffix, sep=""), paste(groupname,"_4",suffix, sep=""),paste(groupname,"_5",suffix, sep=""),paste(groupname,"_6",suffix, sep=""),paste(groupname,"_7",suffix, sep=""), paste(groupname,"_8",suffix, sep=""))
       
       plot <- ggplot() + 
         geom_sf(huc_data_mapping, lwd = 5, mapping=aes(fill=factor(grouping)), color=NA)+
@@ -165,12 +165,28 @@ print_dominance_plots <- function(species_info, region_name){
   print(plot_dominance_gg(dominance_data, title=paste("Number of Stream Classes by K Value in", region_name)))
 }
 
+load_species_lookup <- function(csv_path="data/species_level_aggregation_lookup.csv"){
+  species_aggregation <- read.csv(csv_path)
+  # make a new field merging genus and species with an underscore (as lowercase) - also remove
+  species_aggregation$Sci_Name <- apply(species_aggregation, MARGIN=1, function(row){return(paste(row[1],row[2], sep = "_"))})
+  # unsafe characters
+  # make a list that uses sci name as key and species name as value
+}
+
+species_lookup <- function(sci_name){
+  # clip front off scientific name
+  # make lowercase
+  # remove unsafe characters
+  # look up species name using sci name
+  
+}
+
 
 ```
 
 
 ## Overview and Basic Methods
-In this version (June 2018) of the clustering, translocations were _not_ included. Clusters must be contiguous in this version, as determined by a shared boundary or vertex, not by hydrologic connectivity. All HUCs were included, regardless of the minimum number of taxa (includes ones with one or none). Clustering was done with Flow Sensitive Taxa.
+In this version (September 2018) of the clustering, translocations were _not_ included. Clusters must be contiguous in this version, as determined by a shared boundary or vertex, not by hydrologic connectivity. Minumum number of species is 1 in order to exclude out of state HUCs and empty areas. Clustering was done with Flow Sensitive Taxa, which were updated to include the new tidewater goby split. Additionally, data were aggregated from taxa to species, with the taxonomy recently validated by Peter Moyle.
 
 Clustering was done by a PISCES tool that subsets and formulates the data to be used by ArcGIS' Grouping Analysis tool, where prior versions were clustered through manual steps and then fed into GeoDa's K-Means tool.
 
@@ -185,7 +201,7 @@ The region was broken out primarily into
 
 The map below shows the areas that were actually included in clustering - in this case, that also means that areas with less than two taxa were removed.
 
-```{r map of region breakouts, fig.height=12, fig.width=12,}
+```{r map of region breakouts, fig.height=12, fig.width=12, eval=FALSE}
 
 writeLines("td, th { padding : 6px } th { background-color : #fff ; color : #000; border : 1px solid #333; } td { color : #000 ; border : 1px solid #333 }", con = "mystyle.css")  # add the CSS for the data tables
 
@@ -209,7 +225,7 @@ ggplot() +
 cv_region_name = "central_valley"
 cv_species_info <- species_maps(cv_region_name, "Central Valley", huc_data)
 cv_species_info$region_map  # print the map
-print_dominance_plots(cv_species_info, cv_region_name)
+#print_dominance_plots(cv_species_info, cv_region_name)
 cv_species_lists <- species_lists_by_group_dfs(cv_species_info$species_data, cv_region_name)  # species_info$species_data is the data frame for the region
 
 for(df in cv_species_lists){
@@ -227,7 +243,7 @@ for(df in cv_species_lists){
 gb_region_name <- "great_basin"
 gb_species_info <- species_maps(gb_region_name, "Great Basin", huc_data)
 gb_species_info$region_map  # print the map
-print_dominance_plots(gb_species_info, gb_region_name)
+#print_dominance_plots(gb_species_info, gb_region_name)
 gb_species_lists <- species_lists_by_group_dfs(gb_species_info$species_data, gb_region_name)  # species_info$species_data is the data frame for the region
 
 for(df in gb_species_lists){
@@ -243,7 +259,7 @@ for(df in gb_species_lists){
 coast_region_name = "north_coast"
 coast_species_info <- species_maps(coast_region_name, "North Coast", huc_data)
 coast_species_info$region_map  # print the map
-print_dominance_plots(coast_species_info, coast_region_name)
+#print_dominance_plots(coast_species_info, coast_region_name)
 coast_species_lists <- species_lists_by_group_dfs(coast_species_info$species_data, coast_region_name)  # species_info$species_data is the data frame for the region
 
 for(df in coast_species_lists){
@@ -258,7 +274,7 @@ for(df in coast_species_lists){
 soco_region_name = "south_coast"
 soco_species_info <- species_maps(soco_region_name, "South Coast", huc_data)
 soco_species_info$region_map  # print the map
-print_dominance_plots(soco_species_info, soco_region_name)
+#print_dominance_plots(soco_species_info, soco_region_name)
 soco_species_lists <- species_lists_by_group_dfs(soco_species_info$species_data, soco_region_name)  # species_info$species_data is the data frame for the region
 
 for(df in soco_species_lists){
