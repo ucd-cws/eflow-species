@@ -6,23 +6,14 @@ output:
     css: mystyle.css
 ---
 
-```{r setup, echo=FALSE, include=FALSE}
+```{r setup}
 mapping_code <- file.path(getwd(), "core_mapping_code.R")
 cluster_geopackage <- file.path("../..", "data/phase2/clusters_noestuary_noempty.gpkg")
-cluster_layer_name <- "clusters_noestuary_species_aggregation_v13_2018_09_17"
+cluster_layer_name <- "clusters_noestuary_noempty_no_aggregation_v11_2018_09_17"
 source(mapping_code)
 
 ```
 
-
-```{r many_statewide_random_setup}
-cluster_geopackage <- file.path("../..", "data/phase2/cluster_species_level_refined.gpkg")
-cluster_layer_name <- "nodelta_noempty_species_refined_2018_09_11"
-source(mapping_code)
-
-data_statewide_random <- huc_data
-
-```
 ```{r many_statewide_random}
  # we'll repurpose this so that it maps everything, but there are a few too many steps to do for this week's meeting, so I'll skip for now
 # we need to:
