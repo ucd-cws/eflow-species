@@ -1,0 +1,526 @@
+---
+title: "Eflows Species Clustering in CA Regions"
+output:
+  html_document:
+    df_print: paged
+    css: mystyle.css
+---
+
+```{r setup, echo=FALSE, include=FALSE}
+library(sf)
+library(maps)
+#library(devtools)
+#devtools::install_github("tidyverse/ggplot2") # need latest version of ggplot2 in order to use geom_sf
+library(ggplot2)
+library(ggmap)
+library(rgdal)
+library(tidyr)
+library(dplyr)
+library(DT)
+library(magick)
+library(here)
+
+group_palette <- c('#a6cee3','#1f78b4','#b2df8a','#33a02c','#fb9a99','#e31a1c','#fdbf6f','#ff7f00','#cab2d6','#6a3d9a')
+
+default_num_groups <- c(3,4,5,6,7)
+
+huc12_eflow_percents <- read.csv("data/HUC12s_eflow_percent.csv", stringsAsFactors = FALSE)
+suffix<-"groups_num"
+
+huc_data <- sf::st_as_sf(rgdal::readOGR(paste("data/report_update/clusters2.gpkg", sep=""),"june_2018_current_notrans_neighbors", stringsAsFactors=FALSE))
+
+region_boundaries <- sf::st_as_sf(rgdal::readOGR(paste("data/report_update/regions.gpkg", sep=""),"regions_dissolved", stringsAsFactors=FALSE))
+
+id_to_title <- function(x) {  # adapted from R docs via SO: https://stackoverflow.com/a/6364905
+  s <- strsplit(x, "_")[[1]]
+  return(paste(toupper(substring(s, 1,1)), substring(s, 2), sep="", collapse=" "))
+}
+
+filter_data_to_group <- function (group_name, data){
+  return(data %>% drop_na(paste(group_name,'_5groups_num', sep="")))    
+}
+
+species_maps <- function(groupname, title, region_data, inset_image=NA, inset_x=0, inset_y=1165){
+    ##
+    ##
+    ##  overview image is a premade map we'll composite into the corner
+  
+    huc_data <- filter_data_to_group(groupname, region_data)  
+  
+      # now, we need to convert the attributes we're using for groupings into a single column so that GGPlot can do our mapping for us with facets
+      # paste(groupname,"_2",suffix, sep=""),paste(groupname,"_8",suffix, sep=""),paste(groupname,"_9",suffix, sep="")
+    huc_data_mapping <- huc_data %>% gather(key=model_run, value=grouping, paste(groupname,"_3",suffix, sep=""),paste(groupname,"_4",suffix, sep=""),paste(groupname,"_5",suffix, sep=""),paste(groupname,"_6",suffix, sep=""),paste(groupname,"_7",suffix, sep=""))
+            
+    for(value in default_num_groups){  # make the labels come out nice-y nice
+      huc_data_mapping$model_run <- sub(paste(groupname,"_",value,suffix,sep=""), paste(value, "Groups"), huc_data_mapping$model_run)
+    }
+      
+    huc_data_mapping$Grouping <- as.factor(huc_data_mapping$grouping)  # do it out here so that on the legend it just says "Grouping"
+
+      
+    plot <- ggplot() + 
+      geom_sf(huc_data_mapping, lwd = 5, mapping=aes(fill=Grouping), color=NA)+
+      scale_fill_manual(values=group_palette, limits=c(1,2,3,4,5,6,7,8,9,10)) +
+      ggtitle(paste(title," Species Groupings", sep="")) +
+      facet_wrap("model_run")+
+      theme_bw()+
+      theme(panel.grid.major = element_line(colour = 'transparent'))+
+      theme(strip.background = element_blank(), # facet theme control
+            strip.placement = "outside", 
+            axis.line.x = element_line(color="black", size = 1),
+            axis.line.y = element_line(color="black", size = 1),
+            plot.title = element_text(hjust = 0.5))
+     
+    if (!is.na(inset_image)){  # if we want to composite an overview image in
+      filename=paste0(here("plots//"), last_plot()$labels$title, ".png")  # we'll need to save it out first
+      ggsave(plot=plot, filename = filename,
+         width = 12, height = 12, dpi = 150)
+      
+      plot_flat <- image_read(filename)  # then read it back in
+      # And bring in a logo
+      overview_raw <- image_read(inset_image)  # read the overview
+      
+      # Stack them on top of each other
+      plot <- image_composite(plot_flat, overview_raw, offset=paste("+",inset_x,"+",inset_y,sep=""))
+    }
+    
+    return(list("region_map"=plot,"species_data"=huc_data))
+      
+}
+
+
+species_lists_by_group_dfs <- function (data_frame, group_name, groups=default_num_groups, counts=FALSE){
+
+  data_frame <- filter_data_to_group(group_name, data_frame)
+  st_geometry(data_frame) <- NULL # drop the SF geometry info
+  remove_fields <- c("OBJECTID", "huc_8", "huc_10", "huc_12_string", "huc_12_double", "taxa_count", "geom_Length", "geom_Area", "oid_int_copy", "Shape_Length", "Shape_Area", "huc4","huc_region_group")
+  
+  data_of_interest <- select(data_frame, -one_of(remove_fields))  # filters to just the current group and removes extra fields
+  
+  current_field_names <-names(data_of_interest) # get the current column names
+  new_field_names <- gsub("Flow_Sensitive_current_", "", current_field_names)  # replace the prefix on the fields
+  
+  colnames(data_of_interest) <- new_field_names
+  
+  # general approach we'd want here is to make vectors of the species in each group, then add to a list
+  # then extend all lists to be the same length, then cbind them all to a single df and print the df
+  all_groupings = list()
+  for(grouping in groups){
+    output_list = list()  # make an empty output list
+    field_name <- paste(group_name,"_",grouping,suffix, sep="")
+    for(group in seq(1,grouping)){ # for each subgroup in this grouping
+      records_in_group <- data_of_interest %>% dplyr::filter_(paste(field_name, "==", as.character(group)))  # filters to just the current group
+
+      records_in_group <- records_in_group[, -grep(".+groups_.+", colnames(records_in_group))]  # drop columns for groupings
+      gathered_data <- as.data.frame(records_in_group) %>% tidyr::gather(key="species", value="presence")
+      found_species <- gathered_data %>% dplyr::filter(presence==1) %>% distinct(species)
+      g_title <- paste("group_", group, sep="")
+      #colnames(found_species) <- g_title  # assign it so that the data frame field has the right name before we merge it
+      #found_species <- sort(found_species, na.last=TRUE)
+      sorted_species <- sort(found_species$species)
+      output_list[[g_title]] = sorted_species  # add the group to the output list  
+      
+    }
+    
+    output_list <- lapply(output_list, `length<-`, max(lengths(output_list)))  # Make all of the vectors in the list the same length
+    
+    all_groupings[[grouping]] <- as.data.frame(output_list)
+  }
+  
+  return(groupings=all_groupings)
+}
+
+
+get_dominance_data  <- function(data_frame, group_name, groups=default_num_groups, counts=FALSE){
+  st_geometry(data_frame) <- NULL # drop the SF geometry info
+  group_dominance_data = data.frame(number_clusters=numeric(), value=numeric(), dominant_class=character())  # set it to NA to start - a function will create a data frame from it
+  for(grouping in groups){
+    field_name <- paste(group_name,"_",grouping,suffix, sep="")
+    group_dominance_data <- get_cluster_dominance_data(data_frame, field_name, grouping, group_dominance_data, counts=counts)  # pass in the whole DF with the extra fields - we need the HUC 12 field
+  }
+  return(group_dominance_data)
+}
+
+get_dominant_stream_class_by_hucs <- function(group_records, eflow_data=huc12_eflow_percents, counts=FALSE){
+  ## Given a set of records from a cluster, determines the dominant stream flow class in that cluster
+  ## and the proportion of it that is the dominant class
+  ## If counts is TRUE, then instead of proportion, it outputs the count as the "proportion_dominant", but
+  ## it will still include the dominant class in the list output for symbolization
+  
+  eflow_records <- eflow_data %>% filter(HUC12 %in% group_records$huc_12_string)
+  eflow_sums <- eflow_records %>% group_by(eflow_type) %>% summarise(group_sum = sum(eflow_length, na.rm=TRUE))
+  max_record = which.max(eflow_sums$group_sum)
+  proportion_dominant = eflow_sums[max_record,]$group_sum / sum(eflow_sums$group_sum)
+  if(counts==TRUE){
+    output_value = nrow(eflow_sums)
+  }else{
+    output_value = proportion_dominant
+  }
+  return(list(class=eflow_sums[max_record,]$eflow_type, result_value=output_value))
+}
+
+add_record_to_df <- function(original_df, num_groups, percent, dominant_class){
+  ## This record will keep adding data to the end of the data frame about the dominance data
+  if(length(percent) == 0 || length(dominant_class) == 0){  # in some cases, we get an effective null, but it's numeric(0) - we have to test the length of it to get whether or not it's this value
+    return(original_df)
+  }
+  new_group_data = data.frame(number_clusters=num_groups, value=percent, dominant_class=dominant_class)
+  
+  return(rbind(original_df, new_group_data))  # otherwise, append the new data to the end
+}
+
+get_cluster_dominance_data <- function(records, cluster_field, num_clusters, existing_data, counts=FALSE){
+  # make an empty data frame to hold the data
+  for(group_num in 1:num_clusters){
+    group_records <- records %>% dplyr::filter_(paste(cluster_field, "==", group_num))
+    group_info <- get_dominant_stream_class_by_hucs(group_records, counts=counts)
+    existing_data <- add_record_to_df(existing_data, num_clusters, group_info$result_value, group_info$class)
+  }
+  
+  return(existing_data)
+
+}
+
+plot_dominance_gg <- function(dominance_data, title, y_label){
+  
+  # coloration via: https://stackoverflow.com/a/21146026/587938
+  new_plot <- ggplot(dominance_data, aes(x=number_clusters, y=value, size=5)) +
+              geom_point(mapping=aes(colour=dominant_class)) + 
+              scale_colour_discrete(drop=TRUE, limits = levels(dominance_data$dominant_class)) +
+              labs(title=title, x="Number of Clusters", y=y_label)
+  
+  return(new_plot)
+}
+
+print_dominance_plots <- function(species_info, region_name){
+  dominance_data <- get_dominance_data(species_info$species_data, region_name, counts=FALSE)
+  print(plot_dominance_gg(dominance_data, title=paste("Percent Dominance by K Value in", id_to_title(region_name)), y_label="Percent of Cluster Covered by Dominant Stream Class"))
+  dominance_data <- get_dominance_data(species_info$species_data, region_name, counts=TRUE)
+  print(plot_dominance_gg(dominance_data, title=paste("Number of Stream Classes by K Value in", id_to_title(region_name)), y_label="Number of Distinct Stream Classes in Each Cluster"))
+}
+
+
+```
+
+# Flow Sensitive Species
+We created clusters for many different subsets of native California fish taxa including anadromous, wide ranging, narrow-ranged, and flow sensitive (as defined in Grantham et al, 2014), but determined that the Flow Sensitive grouping was the most appropriate for this project (FLAG: Why?).
+```{r species_listing, echo=FALSE, include=FALSE}
+sci_names <- c("Entosphenus tridentata",
+"Entosphenus similis",
+"Lampetra ayersi",
+"Lampetra hubbsi",
+"Lampetra richardsoni",
+"Acipenser medirostris",
+"Acipenser medirostris",
+"Acipenser transmontanus",
+"Siphatales bicolor snyderi",
+"Gila coerulea",
+"Gila orcutti",
+"Lavinia exilicauda exilicauda",
+"Lavinia exilicauda harengeus",
+"Hesperoleucus symmetricus symmetricus",
+"Hesperoleucus symmetricus subspecies",
+"Hesperoleucus symmetricus subditus",
+"Hesperoleucus symmetricus subspecies",
+"Hesperoleucus mitrulus",
+"Pogonichthys macrolepidotus",
+"Mylopharodon conocephalus",
+"Ptychocheilus grandis",
+"Rhinichthys osculus subspecies",
+"Rhinichthys osculus robustus",
+"Rhinichthys osculus subspecies",
+"Rhinichthys osculus subspecies",
+"Pantosteus lahontan",
+"Catostomus occidentalis occidentalis",
+"Catostomus occidentalis mnioltiltus",
+"Catostomus microps",
+"Catostomus snyderi",
+"Catostomus luxatus",
+"Catostomus santaanae",
+"Chasmistes brevirostris",
+"Xyrauchen texanus",
+"Spirinchus thaleichthys",
+"Hypomesus pacificus",
+"Prosopium williamsoni",
+"Oncorhynchus tshawytscha",
+"Oncorhynchus tshawytscha",
+"Oncorhynchus tshawytscha",
+"Oncorhynchus tshawytscha",
+"Oncorhynchus tshawytscha",
+"Oncorhynchus tshawytscha",
+"Oncorhynchus tshawytscha",
+"Oncorhynchus kisutch",
+"Oncorhynchus kisutch",
+"Oncorhynchus mykiss",
+"Oncorhynchus mykiss",
+"Oncorhynchus mykiss",
+"Oncorhynchus mykiss",
+"Oncorhynchus mykiss",
+"Oncorhynchus mykiss",
+"Oncorhynchus mykiss",
+"Oncorhynchus mykiss gilberti",
+"Oncorhynchus clarki henshawi",
+"Cyprinodon macularius",
+"Cyprinodon radiosus",
+"Cottus klamathensis macrops",
+"Cottus klamathensis polyporus",
+"Cottus klamathensis klamathensis",
+"Cottus gulosus",
+"Cottus pitensis",
+"Gasterosteus aculeatus microcephalus",
+"Gasterosteus aculeatus williamsoni",
+"Archoplites interruptus",
+"Hysterocarpus traskii traskii",
+"Eucyclogobius newberryi",
+"Hesperoleucus symmetricus")
+
+common_names <- c("Pacific lamprey",
+"Klamath River lamprey",
+"River lamprey",
+"Kern brook lamprey",
+"Western brook lamprey",
+"Northern green sturgeon",
+"Southern green sturgeon",
+"White sturgeon",
+"Owens tui chub",
+"Blue chub",
+"Arroyo chub",
+"Sacramento hitch",
+"Monterey hitch",
+"California roach",
+"Red Hills roach",
+"Southern coastal roach",
+"Tomales roach",
+"Northern roach",
+"Sacramento splittail",
+"Hardhead",
+"Sacramento pikeminnow",
+"Sacramento speckled dace",
+"Lahontan speckled dace",
+"Owens speckled dace",
+"Santa Ana speckled dace",
+"Lahontan mountain sucker",
+"Sacramento sucker",
+"Monterey sucker",
+"Modoc sucker",
+"Klamath largescale sucker",
+"Lost River sucker",
+"Santa Ana sucker",
+"Shortnose sucker",
+"Razorback sucker",
+"Longfin smelt",
+"Delta smelt",
+"Mountain whitefish",
+"Upper Klamath-Trinity fall Chinook salmon",
+"Upper Klamath-Trinity spring Chinook salmon",
+"California Coast fall Chinook salmon",
+"Central Valley winter Chinook salmon",
+"Central Valley spring Chinook salmon",
+"Central Valley late fall Chinook salmon",
+"Central Valley fall Chinook salmon",
+"Central Coast coho salmon",
+"Southern Oregon Northern California coast coho salmon",
+"Northern California coast winter steelhead",
+"Northern California coast summer steelhead",
+"Klamath Mountains Province winter steelhead",
+"Klamath Mountains Province summer steelhead",
+"Central California coast winter steelhead",
+"South Central California coast steelhead",
+"Southern California steelhead",
+"Kern River rainbow trout",
+"Lahontan cutthroat trout",
+"Desert pupfish",
+"Owens pupfish",
+"Bigeye marbled sculpin",
+"Lower Klamath marbled sculpin",
+"Upper Klamath marbled sculpin",
+"Riffle sculpin",
+"Pit sculpin",
+"Inland threespine stickleback",
+"Unarmored threespine stickleback",
+"Sacramento perch",
+"Sacramento tule perch",
+"Tidewater goby",
+"Kaweah roach")
+
+flow_sensitive_species <- cbind(sci_names, common_names)
+colnames(flow_sensitive_species) <- c("Scientific_Name", "Common_Name")
+datatable(flow_sensitive_species)
+  show(knitr::kable(flow_sensitive_species, format="html"))
+```
+
+
+# Region breakouts
+* How did we get these regions?
+Considered Moyle ZooGeo and 
+
+# Full methods
+
+## Final clustering settings
+
+## PISCES data types and tool
+
+# Process
+ * Prior attempts (with links?)
+
+
+# Overview and Basic Methods
+In this version (June 2018) of the clustering, translocations were _not_ included. Clusters must be contiguous in this version, as determined by a shared boundary or vertex, not by hydrologic connectivity. All HUCs were included, regardless of the minimum number of taxa (includes ones with one or none). Clustering was done with Flow Sensitive Taxa.
+
+Clustering was done by a PISCES tool that subsets and formulates the data to be used by ArcGIS' Grouping Analysis tool, where prior versions were clustered through manual steps and then fed into GeoDa's K-Means tool.
+
+
+## Map of Region Breakouts
+The region was broken out primarily into
+ * North Coast (North Coast->San Francisco)
+ * South Coast (South of SF -> Southern California)
+ * Central Valley (anything draining out through the Central Valley - excludes Honey/Eagle Lakes and SF Bay)
+ * Great Basin (anything in hydrologic region 16 in the northern part of the state, contiguous)
+ * Desert - not clustered or shown here as previous clustering indicated single-species driven areas (Includes eastern sierra that is part of region 18, souther reaches of region 15 in the state, portion of Colorado River, and a small piece of region 16)
+
+The map below shows the areas that were actually included in clustering - in this case, that also means that areas with less than two taxa were removed.
+
+```{r map of region breakouts, fig.height=12, fig.width=12, echo=FALSE, include=FALSE, eval=FALSE}
+
+## NOTE the eval=FALSE - this is an old version that I'm keeping for now - not included in outputs
+
+huc_data_wgs84 <- st_transform(huc_data, 4326)  # convert the SF geom to WGS 84 - for bounding box
+huc_data_webmercator <- st_transform(huc_data, 3857)  # convert the SF geom to web mercator - for actual plotting - ggmap is weird
+bounding <- sf::st_bbox(huc_data_wgs84)  # get the bounding box of the data - we'll use this to get the basemap
+names(bounding) <- c("left","bottom","right","top")  # make it a bounding box ggmap expects
+
+#basemap <- ggmap(get_map(location = bounding, source = "stamen", maptype = "toner", crop = T))  # now get the basemap - use Stamen's black and white "Toner" map  - pass the bounding box in so we get tiles covering this area
+
+#ggplot() + 
+#  geom_sf(huc_data_wgs84, lwd = 5, mapping=aes(fill=huc_region_group), color=NA, inherit.aes = FALSE)+
+#  ggtitle("Region Breakout") + 
+#  theme_bw()+
+#  theme(panel.grid.major = element_line(colour = 'transparent'))+
+#  theme(strip.background = element_blank(), # facet theme control
+#        strip.placement = "outside", 
+#        axis.line.x = element_line(color="black", size = 1),
+#        axis.line.y = element_line(color="black", size = 1),
+#        plot.title = element_text(hjust = 0.5))
+
+basemap_raster <- get_map(location = bounding, source = "stamen", maptype = "toner-background", crop = T)
+basemap_labels <- get_map(location = bounding, source = "stamen", maptype = "toner-labels", crop = T)
+plot(huc_data_webmercator["huc_region_group"], axes=TRUE, main="Region Breakout", bgMap = basemap_raster, key.width = lcm(4.5), border=NA)
+plot(basemap_labels, add=TRUE)
+```
+
+```{r, fig.width=8, fig.height=8}
+
+writeLines("td, th { padding : 6px } th { background-color : #fff ; color : #000; border : 1px solid #333; } td { color : #000 ; border : 1px solid #333 }", con = "mystyle.css")  # add the CSS for the data tables
+
+## GGMap is a bit weird about its coordinate systems, see:
+#    https://rstudio-pubs-static.s3.amazonaws.com/16660_7d1ab1b355344578bbacb0747fd485c8.html
+#    and https://github.com/dkahle/ggmap/issues/160
+# This particular method gets everything to align correctly, but involves specific coordinate systems and bounding boxes
+
+library(RStoolbox)
+
+fix_basemap <- function(basemap, reference_object){
+  # reference_object should be in EPSG 3857
+  attr(basemap, "bb")$ll.lat <- st_bbox(reference_object)["ymin"]
+  attr(basemap, "bb")$ll.lon <- st_bbox(reference_object)["xmin"]
+  attr(basemap, "bb")$ur.lat <- st_bbox(reference_object)["ymax"]
+  attr(basemap, "bb")$ur.lon <- st_bbox(reference_object)["xmax"]
+  
+  return(basemap)
+}
+
+region_boundaries_4326 <- st_transform(region_boundaries, 4326)
+bounding <- sf::st_bbox(region_boundaries_4326)  # get the bounding box of the data - we'll use this to get the basemap
+names(bounding) <- c("left","bottom","right","top")  # make it a bounding box ggmap expects
+
+basemap <- get_map(location = bounding, source = "stamen", maptype = "toner-background", crop = T)  # now get the basemap - use Stamen's black and white "Toner" map  - pass the bounding box in so we get tiles covering this area
+
+basemap_labels <- get_map(location = bounding, source = "stamen", maptype = "toner-labels", crop = T)
+
+region_boundaries_3857 <- st_transform(region_boundaries, 3857)
+basemap <- fix_basemap(basemap, region_boundaries_3857)
+basemap_labels <- fix_basemap(basemap_labels, region_boundaries_3857)
+# Overwrite bbox elements of the raster basemap with those from the polygons layer
+# that is in EPSG:3857
+
+# Create the ggmap
+ggbasemap <- ggmap(basemap)
+
+ggbasemap + 
+  coord_sf(crs = st_crs(3857)) + # force it to be EPSG:3857
+  geom_sf(data = region_boundaries_3857, lwd = 5, mapping=aes(fill=huc_region_group), color=NA, inherit.aes = FALSE) +
+  ggtitle("Region Breakout") + 
+  theme_bw()+
+  theme(panel.grid.major = element_line(colour = 'transparent'))+
+  theme(strip.background = element_blank(), # facet theme control
+        strip.placement = "outside", 
+        axis.line.x = element_line(color="black", size = 1),
+        axis.line.y = element_line(color="black", size = 1),
+        plot.title = element_text(hjust = 0.5))
+```
+
+
+## Central Valley
+
+```{r map central valley, fig.height=8, fig.width=8, results='asis'}
+cv_region_name = "central_valley"
+cv_species_info <- species_maps(cv_region_name, "Central Valley Drainage, Including West Slope Sierra, Pit, and East Coast Range", huc_data, inset_image=here("maps/central_valley_inset.png"), inset_x=1160,inset_y=1165)
+cv_species_info$region_map  # print the map
+print_dominance_plots(cv_species_info, cv_region_name)
+cv_species_lists <- species_lists_by_group_dfs(cv_species_info$species_data, cv_region_name)  # species_info$species_data is the data frame for the region
+
+for(df in cv_species_lists){
+  show(knitr::kable(df, format="html"))
+}
+
+
+
+```
+
+
+## Great Basin
+
+```{r map great basin, fig.height=8, fig.width=8, results='asis'}
+gb_region_name <- "great_basin"
+gb_species_info <- species_maps(gb_region_name, "Great Basin", huc_data, inset_image=here("maps/great_basin_inset.png"),inset_x=1042, inset_y=1165)
+gb_species_info$region_map  # print the map
+print_dominance_plots(gb_species_info, gb_region_name)
+gb_species_lists <- species_lists_by_group_dfs(gb_species_info$species_data, gb_region_name)  # species_info$species_data is the data frame for the region
+
+for(df in gb_species_lists){
+  show(knitr::kable(df, format="html"))
+}
+
+```
+
+
+## North Coast
+
+```{r map coast, fig.height=8, fig.width=8, results='asis'}
+coast_region_name = "north_coast"
+coast_species_info <- species_maps(coast_region_name, "North Coast", huc_data)#, inset_image=here("maps/north_coast_inset.png"),inset_x=1105, inset_y=1165)
+coast_species_info$region_map  # print the map
+print_dominance_plots(coast_species_info, coast_region_name)
+coast_species_lists <- species_lists_by_group_dfs(coast_species_info$species_data, coast_region_name)  # species_info$species_data is the data frame for the region
+
+for(df in coast_species_lists){
+  show(knitr::kable(df, format="html"))
+}
+
+```
+
+## South Coast
+
+```{r map South Coast, fig.height=8, fig.width=8, results='asis'}
+soco_region_name = "south_coast"
+soco_species_info <- species_maps(soco_region_name, "South Coast", huc_data)#, inset_image=here("maps/south_coast_inset.png"),inset_x=1235, inset_y=1005)
+soco_species_info$region_map  # print the map
+print_dominance_plots(soco_species_info, soco_region_name)
+soco_species_lists <- species_lists_by_group_dfs(soco_species_info$species_data, soco_region_name)  # species_info$species_data is the data frame for the region
+
+for(df in soco_species_lists){
+  show(knitr::kable(df, format="html"))
+}
+
+```
+
