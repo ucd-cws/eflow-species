@@ -33,11 +33,42 @@ family clustering because it produces fewer artifacts and less chaotic clusters.
 the clusters appear to be more meaningful from a management standpoint.
 
 ## Exclusion of empty and out of state areas
+Through examination of clusters, we determined that formation of regions was often heavily influenced
+by large, out of state areas, for which PISCES lacks range data, We excluded all HUCs that don't
+contain any non-translocated native fish from clustering to mitigate this. It removed some areas
+in-state that may have translocations, or which may be empty as well. Clustering improved as a result.
 
 ## Exploration of true random seeds
+We returned to our original methods briefly to examine how a traditional Kmeans algorithm that
+doesn't force contiguous regions performs now that we are aggregating to species-level before
+clustering. In limited testing (7 runs for one region, and viewing 6 of 27 runs for statewide
+clustering), we observed instability in clustering with different random seeds using the
+standard kmeans algorithm. The statewide clustering exhibited much more stability, but we
+believed it was less useful from a management standpoint than contiguous clusters since distant
+HUCs can end up in the same cluster.
 
 ## Clustering without manual region breaks
-
+We also tried clustering statewide, without our subregions prior to clustering, but still
+requiring contiguous regions. This performed decently well, with a few unusual regions (including
+one that crossed from western Sacramento Valley hills into the Klamath). We largely felt that
+the clusters produced here validated our region splits because most clusters were contained to the
+watershed boundaries we used for region splitting. We decided to continue splitting regions
+because it allows us to better target a manageable and useful set of clusters that balances
+across the state.
 
 ## Refinements to regions
+We originally removed the Delta after deciding it was driving too much of the central valley's
+clustering with too narrow of an area. We felt it would best be managed on its own.
+Clustering improved after this changed, but we noticed significant artifacting in HUCs flowing
+into the San Francisco Bay or Suisun Marsh, primarily in the HUCs located in the North Coast
+region. To mitigate this, HUCs that flow into Suisun Bay (HUC_10 1805000101) were moved from the
+North Coast region to the Central Valley region where they have more in common with their neighbors.
+We also removed HUCs draining immediately into the San Francisco Bay and the Bay itself, using
+the 3 HUC 10s that make up the Bay proper and surrounding marshlands (but not hillsides that drain
+into the bay). We did this for the same reasons we removed the Delta - these areas will have unique
+managment considerations separate from the clusters and were driving clustering to an unhelpful
+degree.
 
+## Some clusters have the same species list
+This is a problem Nick is still investigating, where within a region, some clusters will have the
+same list of present species.
