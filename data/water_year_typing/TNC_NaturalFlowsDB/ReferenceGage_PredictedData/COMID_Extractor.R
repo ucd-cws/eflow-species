@@ -4,7 +4,7 @@
 mos<-c("01","02","03","04","05","06","07","08","09","10","11","12")
 sts<-c("Mean")
 #Load set of desired COMIDS
-refs <- ref_gage_COMID
+refs <- COMIDs_WYT_final
 #Verify that requested COMIDs are included in CA master COMID list
 cacomid<-read.csv("C:/Users/aobester/Desktop/California_COMIDs.csv",as.is=T)
 #list requested COMIDs that are NOT in the master list
