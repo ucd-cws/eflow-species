@@ -1,0 +1,186 @@
+---
+title: "Eflow species"
+output:
+  html_document:
+    df_print: paged
+---
+
+Combines the eflow classifications with the PISCES species data. This notbook relies on steps from two other notebooks `eflows-db.Rmd` which pulls data from the PISCES data base and save it as a csv and `eflows-distance.Rmd` which calculates the total stream distance of each eflow class in each HUC12. 
+
+```{r setup, include=FALSE}
+
+library(tidyverse)
+library(sf)
+
+# since you can't source from .Rmd's let's just load the data from the csv files
+pisces_huc12_list <- read.csv("data/pisces_huc12_fish_presence_current.csv", stringsAsFactors = FALSE)
+
+pisces_huc12_list$HUC_12 <- as.character(pisces_huc12_list$HUC_12)
+
+huc12_eflow_percents <- read.csv("data/HUC12s_eflow_percent.csv", stringsAsFactors = FALSE)
+
+# Load in HUC shapefiles
+huc12_sf <- st_read("shps/HUC12s_simple/HUC12s.shp") # simplified using mapshaper.com
+huc6_sf <- st_read("shps/HUC6s_simple/HUC6s.shp") # simplified using mapshaper.com
+```
+
+
+## Join the species info to the huc12 percent data
+
+Since we want both extreams for the threashold (0%, 100%) let's start by joining the species data to the huc12 eflow percent dataframe. The end result will be that every combination of huc12~eflow type will be assigned all the species that were found in the watershed. We know that this is probably not going to be the case and there will be a threshold but this is neccissary since we need to run both extreams (0% and 100% dominance).
+
+```{r join, dependson=pisces_huc12_list, dependson=huc12_eflow_percents}
+
+# joins all the species info the eflow huc12 %'s
+eflows_percents_fish  <- left_join(huc12_eflow_percents, pisces_huc12_list, by=c("HUC12"="HUC_12"))
+                                   
+```
+
+## filter
+
+Set the percentage to use as a threshold. If a eflow class percentage of total river segments is above the threshold than all of the species are assigned to the HUC, otherwise that class is ignored. This is necessiary since many of the HUC12s only contain a small ammount of a given eflow class that may not be representive of the habitat needs of the species records pulled from the database.
+
+```{r filter}
+# todo this is the spot to filter by percentage
+filter_percents <- function(data, threshold){
+  data_p <- data %>% filter(percent>=threshold)
+  return(data_p)
+}
+```
+
+
+
+## Summarize by HUC6s or HUC12s 
+
+```{r}
+# summarize the number of species in each huc6, number of natives, number of non-natives, count of the number of endangered species
+
+summarize_huc6 <- function(data){
+  # collect all the unique observations at the huc 6
+  # since the original data is at the huc12 scale using distinct
+  # will essentially concatonate all the inside data 
+  unique_huc6 <- data %>%
+    distinct(HUC6, eflow_type, eflow_name, abbr, name, species_id, 
+             common_name, native, ca_status, fed_listing, ca_listing)
+  
+  # summary counts using the huc6 scale
+  summary_huc6 <- unique_huc6 %>% 
+    group_by(HUC6, eflow_type, eflow_name) %>%
+    dplyr::summarize(count_native=sum(native==1), count_nonnative=sum(native==0),
+                     count_fed_threatened=sum(fed_listing=="T"), count_fed_endangered=sum(fed_listing=="E"),
+                     count_fed_TE=sum(fed_listing=="E"|fed_listing=="T"), species_list=paste(common_name, collapse = ", "))
+  return(summary_huc6)
+}
+
+
+summarize_huc12 <- function(data){
+  # collect all the unique observations at the huc 12
+  # since the original data is at the huc12 scale using distinct
+  # will essentially concatonate all the inside data 
+  unique_huc <- data %>%
+    distinct(HUC12, eflow_type, eflow_name, abbr, name, species_id, 
+             common_name, native, ca_status, fed_listing, ca_listing)
+  
+  # summary counts using the huc6 scale
+  summary_huc <- unique_huc %>% 
+    group_by(HUC12, eflow_type, eflow_name) %>%
+    dplyr::summarize(count_native=sum(native==1), count_nonnative=sum(native==0),
+                     count_fed_threatened=sum(fed_listing=="T"), count_fed_endangered=sum(fed_listing=="E"),
+                     count_fed_TE=sum(fed_listing=="E"|fed_listing=="T"), species_list=paste(common_name, collapse = ", "))
+  return(summary_huc)
+}
+
+
+```
+
+
+
+```{r facet threshold function, include=FALSE}
+native_species_threshold_map <- function(data, threshold){
+  filtered_data <- filter_percents(data, threshold)
+  sum12 <- summarize_huc12(filtered_data)
+  
+  # join in the eflow percent data to the huc12 shapefile (sf object)
+# will need to use an right (outer) join since there will be multiple rows for each HUC12
+  huc12_sf.thresh <- right_join(huc12_sf, sum12, by=c("HUC_12"="HUC12")) 
+
+  p <- ggplot() + 
+    geom_sf(huc12_sf.thresh, mapping = aes(fill=count_native),color = NA, lwd = 5)+
+    scale_fill_distiller("# of species", palette = "Spectral", direction = -1) +
+    geom_sf(huc6_sf, mapping=aes(), fill=NA, color="black", lwd=1.25)+
+    ggtitle(paste("Threshold", threshold*100, "%")) +
+    theme_bw()+
+    theme(panel.grid.major = element_line(colour = 'transparent'))+
+    facet_wrap(~eflow_name)+
+    theme(strip.background = element_blank(), # facet theme control
+          strip.placement = "outside", 
+          axis.line.x = element_line(color="black", size = 1),
+          axis.line.y = element_line(color="black", size = 1),
+          plot.title = element_text(hjust = 0.5))
+  return(p)
+}
+
+```
+
+
+
+
+## Threshold maps - species counts
+
+```{r threshold 0, fig.height=12, fig.width=12, message=FALSE, warning=FALSE}
+
+p <- native_species_threshold_map(eflows_percents_fish, 0)
+p
+```
+
+
+```{r threshold 0.25, fig.height=12, fig.width=12, message=FALSE, warning=FALSE}
+
+p <- native_species_threshold_map(eflows_percents_fish, 0.25)
+p
+```
+
+
+```{r threshold 1, fig.height=12, fig.width=12, message=FALSE, warning=FALSE}
+
+p <- native_species_threshold_map(eflows_percents_fish, 1)
+p
+```
+
+
+
+## Summary csv using 25% threshold with species lost column
+
+```{r}
+
+huc6_summary_25percent <- summarize_huc6(filter_percents(eflows_percents_fish, 0.25)) %>% 
+    rowwise() %>% 
+    mutate(threshold_species_list=strsplit(species_list, split=", "))
+
+
+# select the rows that are dropped using an anti-join
+huc6_summary_0percent <- summarize_huc6(filter_percents(eflows_percents_fish, 0)) %>% 
+  rowwise() %>% 
+  mutate(nothreshold_species_list=strsplit(species_list, split=", ")) %>% 
+  select(c(HUC6, eflow_type, nothreshold_species_list))
+
+# join the two to list the species that are lost using the threshold
+join <- left_join(huc6_summary_25percent, huc6_summary_0percent, by=c("HUC6", "eflow_type"))
+
+# find the species that are present in the huc 6 when there is no threshold set
+# but get removed when using the threshold. These species will be added to a column
+# called threshold_species_lost
+huc6_summary_25percent_w_losses <- join %>% rowwise() %>%
+  mutate(threshold_species_lost=paste(nothreshold_species_list[(nothreshold_species_list %in% threshold_species_list)==FALSE],  collapse=", ")) %>% select(-c(nothreshold_species_list, threshold_species_list))
+
+huc6_summary_25percent_w_losses
+
+write.csv(huc6_summary_25percent_w_losses, "HUC6_summary_25percent_threshold.csv", row.names = FALSE)
+
+```
+
+
+
+
+
+

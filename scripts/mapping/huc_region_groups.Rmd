@@ -1,0 +1,149 @@
+---
+title: "Eflows Species Clustering in CA Regions"
+output:
+  html_document:
+    df_print: paged
+    css: mystyle.css
+---
+
+```{r setup}
+mapping_code <- file.path(getwd(), "core_mapping_code.R")
+cluster_geopackage <- file.path("../..", "data/phase2/clusters_noestuary_noempty.gpkg")
+cluster_layer_name <- "clusters_noestuary_noempty_no_aggregation_v11_2018_09_17"
+source(mapping_code)
+
+```
+
+```{r many_statewide_random}
+ # we'll repurpose this so that it maps everything, but there are a few too many steps to do for this week's meeting, so I'll skip for now
+# we need to:
+# 1. automate the things in species_maps current done as pastes for each field name in the gather operation
+# 2. increase the size of the unique palette so there are more colors - even repeating would probably be fine at some point, though could lead to confusion. Maybe if palette is larger than 12 or so, it uses a color scale instead? Not ideal
+```
+
+
+## Overview and Basic Methods
+In this version (September 2018) of the clustering, translocations were _not_ included. Clusters must be contiguous in this version, as determined by a shared boundary or vertex, not by hydrologic connectivity. Minumum number of species is 1 in order to exclude out of state HUCs and empty areas. Clustering was done with Flow Sensitive Taxa, which were updated to include the new tidewater goby split. In this round, species were *not* aggregated, so we could compare other final methods between aggregated and unaggregated versions
+
+Clustering was done by a PISCES tool that subsets and formulates the data to be used by ArcGIS' Grouping Analysis tool, where prior versions were clustered through manual steps and then fed into GeoDa's K-Means tool.
+
+
+## Map of Region Breakouts
+The region was broken out primarily into
+ * North Coast (North Coast->San Francisco)
+ * South Coast (South of SF -> Southern California)
+ * Central Valley (anything draining out through the Central Valley - excludes Honey/Eagle Lakes and SF Bay)
+ * Great Basin (anything in hydrologic region 16 in the northern part of the state, contiguous)
+ * Desert - not clustered or shown here as previous clustering indicated single-species driven areas (Includes eastern sierra that is part of region 18, souther reaches of region 15 in the state, portion of Colorado River, and a small piece of region 16)
+
+The map below shows the areas that were actually included in clustering - in this case, that also means that areas with less than two taxa were removed.
+
+```{r map of region breakouts, fig.height=12, fig.width=12, eval=FALSE}
+
+writeLines("td, th { padding : 6px } th { background-color : #fff ; color : #000; border : 1px solid #333; } td { color : #000 ; border : 1px solid #333 }", con = "mystyle.css")  # add the CSS for the data tables
+
+ggplot() + 
+  geom_sf(huc_data, lwd = 5, mapping=aes(fill=huc_region_group), color=NA)+ 
+  ggtitle("Region Breakout") + 
+  theme_bw()+
+  theme(panel.grid.major = element_line(colour = 'transparent'))+
+  theme(strip.background = element_blank(), # facet theme control
+        strip.placement = "outside", 
+        axis.line.x = element_line(color="black", size = 1),
+        axis.line.y = element_line(color="black", size = 1),
+        plot.title = element_text(hjust = 0.5))
+
+
+```
+
+## Central Valley
+
+```{r map central valley, fig.height=12, fig.width=12, results='asis'}
+cv_region_name = "central_valley"
+cv_species_info <- species_maps(cv_region_name, "Central Valley", huc_data)
+cv_species_info$region_map  # print the map
+#print_dominance_plots(cv_species_info, cv_region_name)
+cv_species_lists <- species_lists_by_group_dfs(cv_species_info$species_data, cv_region_name)  # species_info$species_data is the data frame for the region
+
+for(df in cv_species_lists){
+  show(knitr::kable(df, format="html"))
+}
+
+
+
+```
+
+
+## Great Basin
+
+```{r map great basin, fig.height=12, fig.width=12, results='asis'}
+gb_region_name <- "great_basin"
+gb_species_info <- species_maps(gb_region_name, "Great Basin", huc_data)
+gb_species_info$region_map  # print the map
+#print_dominance_plots(gb_species_info, gb_region_name)
+gb_species_lists <- species_lists_by_group_dfs(gb_species_info$species_data, gb_region_name)  # species_info$species_data is the data frame for the region
+
+for(df in gb_species_lists){
+  show(knitr::kable(df, format="html"))
+}
+
+```
+
+
+## North Coast
+
+```{r map coast, fig.height=12, fig.width=12, results='asis'}
+coast_region_name = "north_coast"
+coast_species_info <- species_maps(coast_region_name, "North Coast", huc_data)
+coast_species_info$region_map  # print the map
+#print_dominance_plots(coast_species_info, coast_region_name)
+coast_species_lists <- species_lists_by_group_dfs(coast_species_info$species_data, coast_region_name)  # species_info$species_data is the data frame for the region
+
+for(df in coast_species_lists){
+  show(knitr::kable(df, format="html"))
+}
+
+```
+
+## South Coast
+
+```{r map South Coast, fig.height=12, fig.width=12, results='asis'}
+soco_region_name = "south_coast"
+soco_species_info <- species_maps(soco_region_name, "South Coast", huc_data)
+soco_species_info$region_map  # print the map
+#print_dominance_plots(soco_species_info, soco_region_name)
+soco_species_lists <- species_lists_by_group_dfs(soco_species_info$species_data, soco_region_name)  # species_info$species_data is the data frame for the region
+
+for(df in soco_species_lists){
+  show(knitr::kable(df, format="html"))
+}
+
+```
+
+
+
+## For meeting on k groups
+```{r meeting figures, fig.height=6, fig.width=6, results='asis', echo=FALSE, eval=FALSE}
+## NOTE THE EVAL=FALSE - this chunk won't run when knit - just for interactive work in meeting!
+# make coast info
+coast_region_name = "coast"
+coast_species_info <- species_maps(coast_region_name, "Coast", huc_data)
+coast_species_info$region_map  # print the map
+group_data <- species_lists_by_group_dfs(coast_species_info$species_data, coast_region_name, counts=FALSE)  # species_info$species_data is the data frame for the region
+dominance_data <- group_data$dominance_data
+print(plot_dominance_gg(dominance_data))
+group_data <- species_lists_by_group_dfs(coast_species_info$species_data, coast_region_name, counts=TRUE)  # species_info$species_data is the data frame for the region
+dominance_data <- group_data$dominance_data
+print(plot_dominance_gg(dominance_data))
+
+# make CV
+cv_region_name = "centralvalley"
+cv_species_info <- species_maps(cv_region_name, "Central Valley")
+cv_species_info$region_map  # print the map
+cv_group_data <- species_lists_by_group_dfs(cv_species_info$species_data, cv_region_name)  # species_info$species_data is the data frame for the region
+cv_dominance_data <- cv_group_data$dominance_data
+
+print(plot_dominance_gg(cv_dominance_data))
+
+```
+

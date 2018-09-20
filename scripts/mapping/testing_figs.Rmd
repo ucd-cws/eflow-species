@@ -1,0 +1,35 @@
+```{r setup, echo=FALSE, include=FALSE}
+library(sf)
+library(maps)
+#library(devtools)
+#devtools::install_github("tidyverse/ggplot2") # need latest version of ggplot2 in order to use geom_sf
+library(ggplot2)
+library(rgdal)
+library(tidyr)
+
+
+group_palette <- c('#a6cee3','#1f78b4','#b2df8a','#33a02c','#fb9a99','#e31a1c','#fdbf6f','#ff7f00','#cab2d6','#6a3d9a')
+```
+## TEST DATA
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+# read huc data and immediately convert it into SF data
+huc_data <- st_as_sf(readOGR("groupings/testing.gpkg", "testing"))
+# now, we need to convert the attributes we're using for groupings into a single column so that GGPlot can do our mapping for us with facets
+huc_data_mapping <- huc_data %>% gather(key=model_run, value=grouping, "KM_6_R50_Std_AM_Euc","KM_5_R50_Std_AM_Euc","KM_8_R50_Std_AM_Euc","KM_10_R50_Std_AM_Euc")
+```
+
+```{r eflow species grouping flow sensitive, fig.height=12, fig.width=12,}
+ggplot() + 
+  geom_sf(huc_data_mapping, lwd = 5, mapping=aes(fill=grouping), color=NA)+ 
+  scale_fill_manual(values=group_palette, limits=c(1,2,3,4,5,6,7,8,9,10)) +
+  ggtitle("Flow Sensitive Species Groupings") +
+  facet_wrap("model_run")+
+  theme_bw()+
+  theme(panel.grid.major = element_line(colour = 'transparent'))+
+  theme(strip.background = element_blank(), # facet theme control
+        strip.placement = "outside", 
+        axis.line.x = element_line(color="black", size = 1),
+        axis.line.y = element_line(color="black", size = 1),
+        plot.title = element_text(hjust = 0.5))
+
+```

@@ -1,0 +1,237 @@
+---
+title: "Eflow HUC12 data explore"
+output:
+  html_document:
+    df_print: paged
+---
+
+This R markdown notebook contains preliminary analysis of the distribution of the Eflow classes when summarized by watersheds (HUC12s). In ArcGis, the total segment length for each eflow stream classification was summed up for each of the HUC12s in the major basins California. The NHD stream segments in zone 16 were not classifed so no results for that region will be presented.  
+
+
+
+```{r setup, echo=FALSE, include=FALSE}
+library(tidyverse)
+library(sf)
+library(ggplot2)
+devtools::install_github("tidyverse/ggplot2") # need latest version of ggplot2 in order to use geom_sf
+
+```
+
+
+```{r eflow abbreviations, include=FALSE}
+
+# named list of abbreviations with the full names
+eflow_class_abbreviations <- c("SM"="Snowmelt", 
+                               "HSR"="High-volumne snowmelt and rain",
+                               "LSR"="Low-volume snowmelt and rain", 
+                               "RGW"="Rain and seasonal groundwater", 
+                               "WS"="Winter Storms", 
+                               "GW"="Groundwater", 
+                               "PGR"="Perennial groundwater and rain", 
+                               "FER"="Flashy, ephemeral rain", 
+                               "HLP"="High elevation, low precipitation")
+
+# function to return the eflow class abbreviation from the full name 
+lookup_abbrev <- function(fullname){
+  # find the abbrevation from the match in the named list
+  a <- names(which(eflow_class_abbreviations == fullname))
+  return(a)
+}
+
+# function to lookup the eflow group full name from the abbreviation
+lookup_fullname <- function(abbreviation){
+  f = eflow_class_abbreviations[[abbreviation]]
+  return(f)
+}
+
+```
+
+
+# Calculate the Eflow percentages for every HUC12
+
+The segment sums for each eflow class were added up for each HUC12 in ArcGis using the `tabulate area tool`. This tool returns a csv file the length (meters) of all segments that fall within the watershed boundary. Prior to running the tool in ArcGis, each of the river segments was split at all intersections with the HUC12 boundary layer to avoid any situations where a segment would span multiple HUC12s. The resulting csv (`data/HUC12_eflow_distance.csv`) contains fields for the HUC12 and and the distance in each of the nine eflow classes. 
+
+This step will create a long df that contains all of the combinations of HUC12s and Eflow types (3,971 x 9). However since no HUC12 contain all of the eflow classes, there will be lots of null values. Each row contains the total length of all segements in the HUC12 (meters), the length of the eflow class (meters), and the eflow length percentage of the total length.
+
+
+```{r readcsv, message=FALSE, warning=FALSE}
+# read in data that contains the HUC12s with the breakdown eflow class segment totals
+raw <- read.csv("data/HUC12_eflow_distance.csv", stringsAsFactors = FALSE)
+
+# add a sum field to the table to hold the total length of all the segments in the HUC12
+totlength <- raw %>% rowwise() %>% mutate(total_length=sum(SM,HSR,LSR,WS,GW,PGR,FER,RGW,HLP, na.rm = TRUE))
+
+# Gather the df to a long format and then calculate the percent of the total_length
+ef_huc12_percent<-totlength %>% 
+  group_by(HUC12, total_length) %>% 
+  gather(eflow_type, eflow_length, SM:HLP) %>% # gather variables to a long df to allow for a single operation to calculate percent
+  mutate(percent=eflow_length/total_length) # percent of each class is the length of segments in class divided by total length of all segements in HUC
+
+# spread out the percent df two double check that it worked
+#efpercent_wide <- efpercent %>% group_by(HUC12) %>% spread(EF, PERCENT)
+
+head(ef_huc12_percent)
+
+# remove all of the null values from the dataframe
+ef_huc12_percent_wo_nulls <- ef_huc12_percent %>% 
+  filter(percent>0) %>% 
+  rowwise() %>%
+  mutate(eflow_name=lookup_fullname(eflow_type)) # add column with eflow class full name
+
+
+# save the dataframe to a csv
+export_loc <- "data/HUC12s_eflow_percent.csv"
+
+write.csv(ef_huc12_percent_wo_nulls, export_loc, row.names = FALSE)
+print(paste("Saved to:", export_loc))
+```
+
+## Histogram of the Eflow Percentages
+
+Simple histogram showing the distribution of eflow percentages. This includes all eflow classes such that if a HUC contains three eflow classes each of the percentages will be counted independantly. The large number of eflow types with a percentage of 100 represent the HUC12s that only contain a single class of environmental flows segments. 
+
+```{r percent histogram}
+#  simple histogram showing the distibution of percentages
+ggplot(ef_huc12_percent_wo_nulls, aes(percent*100)) +
+  geom_histogram(bins=30, colour="steelblue")+
+  ylab("Count")+
+  xlab("Percent")+
+  theme_bw() + 
+  theme(panel.grid.major = element_blank(),
+          plot.title = element_text(hjust = 0.5),
+          panel.grid.minor = element_blank())
+```
+
+
+## Count HUC12s with multiple eflow types
+
+```{r count of number of huc12s with multiple eflow classes}
+# count of the number HUC12s with multiple eflow types
+
+ef_counts_per_huc12 <- ef_huc12_percent_wo_nulls %>% 
+  group_by(HUC12) %>% # huc12s are the grouping variable
+  mutate(number_eflow_types=n()) %>% # adds new field for the number 
+  distinct(HUC12, number_eflow_types) # removes any duplicate rows
+
+# then count the number of HUC12s that have the various number of eflows types
+count_huc12s_number_eflow_classes<-ef_counts_per_huc12 %>% 
+  group_by(number_eflow_types) %>% 
+  summarize(number_huc12s = n())
+
+# add the output to the document
+print(count_huc12s_number_eflow_classes)
+
+# bar plot show the breakdown of the number of hucs that have 1, 2, 3, etc eflow types
+ggplot(count_huc12s_number_eflow_classes, aes(x=number_eflow_types, y=number_huc12s))+
+  geom_bar(stat="identity", fill="steelblue")+
+  ylab("Number of HUC12s")+
+  xlab("Number of Eflow Types per HUC12")+
+  theme_bw()+
+  theme(panel.grid.major = element_blank(),
+      plot.title = element_text(hjust = 0.5),
+      panel.grid.minor = element_blank())
+
+```
+
+
+## Map showing the locations where there are multiple Eflow types per HUC12
+
+```{r loadshps, message=FALSE, warning=FALSE, echo=FALSE, include=FALSE}
+# Load in HUC shapefiles
+huc12_sf <- st_read("shps/HUC12s_simple/HUC12s.shp") # simplified using mapshaper.com
+huc6_sf <- st_read("shps/HUC6s_simple/HUC6s.shp") # simplified using mapshaper.com
+```
+
+
+
+```{r map Number of Eflow types per HUC12, fig.height=6, fig.width=6, message=FALSE, warning=FALSE}
+# join in the count data to the huc12 shapefile (sf object)
+huc12_sf.ef_counts_per_huc12 <- inner_join(huc12_sf, ef_counts_per_huc12, by=c("HUC_12"="HUC12"))
+
+
+ggplot() + 
+  geom_sf(huc12_sf.ef_counts_per_huc12, mapping = aes(fill=number_eflow_types),color = NA, lwd = 5)+
+  scale_fill_distiller("Eflow Types", palette = "Spectral", direction = -1) +
+  geom_sf(huc6_sf, mapping=aes(), fill=NA, color="black", lwd=1.25)+
+  ggtitle("Number of Eflow types per HUC12") +
+  theme_bw()+
+  theme(panel.grid.major = element_line(colour = 'transparent'),
+        plot.title = element_text(hjust = 0.5))
+
+```
+
+
+## Faceted map showing the distribution (with percent dominance) of the Eflow class 
+
+Map shows the HUC12s that contain segments for the eflow class. Figure is faceted using the nine different types of eflows. The symbology/color ramp represents what percentage of each HUC12 that given eflow segments make up of the total stream distance in the HUC12. Red areas for a given class shows the areas where the majority of the segment lengths within the HUC12 belong to the eflow type..
+
+```{r facet eflow percents, fig.height=12, fig.width=12, message=FALSE, warning=FALSE}
+
+# join in the eflow percent data to the huc12 shapefile (sf object)
+# will need to use an right (outer) join since there will be multiple rows for each HUC12
+huc12_sf.ef_percents <- right_join(huc12_sf, ef_huc12_percent_wo_nulls, by=c("HUC_12"="HUC12")) 
+
+ggplot() + 
+  geom_sf(huc12_sf.ef_percents, mapping = aes(fill=percent*100),color = NA, lwd = 5)+
+  scale_fill_distiller("% of HUC12", palette = "Spectral", direction = -1) +
+  geom_sf(huc6_sf, mapping=aes(), fill=NA, color="black", lwd=1.25)+
+  ggtitle("Distribution of Eflow types with percentage of HUC12") +
+  theme_bw()+
+  theme(panel.grid.major = element_line(colour = 'transparent'))+
+  facet_wrap(~eflow_name)+
+  theme(strip.background = element_blank(), # facet theme control
+        strip.placement = "outside", 
+        axis.line.x = element_line(color="black", size = 1),
+        axis.line.y = element_line(color="black", size = 1),
+        plot.title = element_text(hjust = 0.5))
+
+
+```
+
+
+
+## Eflow percent dominance by rank
+
+Adds a field that ranks the percentages of each eflow class per HUC (ie eflow class with most segment length is 1, next is 2, etc). Compare the average percentage value of the dominant class (rank = 1) and all subsesquent classes.
+
+
+```{r dominance rank}
+# add a rank field to rank the percentages (ie eflow group with highest % is 1, next highest is 2, etc)
+ef_huc12_percent_rank <-ef_huc12_percent_wo_nulls %>% group_by(HUC12) %>% mutate(per_rank=rank(-percent))
+
+# ggplot(ef_huc12_percent_rank, aes(percent*100)) +
+#   geom_histogram(bins=30, colour="steelblue")+
+#   ylab("Count")+
+#   xlab("Percent")+
+#   theme_bw() + 
+#   theme(panel.grid.major = element_blank(),
+#           plot.title = element_text(hjust = 0.5),
+#           panel.grid.minor = element_blank())+facet_wrap(~per_rank)
+
+# summarize the average percent by eflow type and rank
+ef_percent_rank_summary <-ef_huc12_percent_rank %>% 
+  group_by(eflow_type, per_rank) %>% 
+  summarize(mean_percent=mean(percent), counts=n()) %>% 
+  rowwise() 
+
+# tile plot showing the mean percent dominance by eflow class and relative rank 
+ggplot(ef_percent_rank_summary, aes(per_rank, eflow_type))+
+    geom_tile(data=ef_percent_rank_summary, aes(fill=mean_percent), color="white")+
+    scale_x_continuous(breaks = c(1:6))+
+    scale_fill_gradient2(low="green", high="red", mid="yellow", 
+                         midpoint=0.5, limit=c(0,1),name="AVG %")+
+    geom_text(aes(label=round(mean_percent,2)))+
+    ylab("Eflow Type")+
+    xlab("Relative Rank of Class in HUC12")+
+    coord_equal()+
+    theme_bw() +  # change theme simple with no axis or tick marks
+    theme(panel.border = element_blank(), panel.grid.major = element_blank(),
+          plot.title = element_text(hjust = 0.5),
+          panel.grid.minor = element_blank(),
+          legend.position="right", # position of legend or none
+          legend.direction="vertical", # orientation of legend
+          legend.key.size = unit(1.0, "cm"),
+          axis.text.x=element_text(size=10),
+          axis.text.y=element_text(size=10)
+          )
+```
