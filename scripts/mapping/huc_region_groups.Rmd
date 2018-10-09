@@ -8,8 +8,8 @@ output:
 
 ```{r setup}
 mapping_code <- file.path(getwd(), "core_mapping_code.R")
-cluster_geopackage <- file.path("../..", "data/phase2/clusters_noestuary_noempty.gpkg")
-cluster_layer_name <- "clusters_noestuary_noempty_no_aggregation_v11_2018_09_17"
+cluster_geopackage <- file.path("../..", "data/report_update/October_2018_Update.gpkg")
+cluster_layer_name <- "noestuary_noempty_no_aggregation_v14_2018_10_09"
 source(mapping_code)
 
 ```

@@ -273,6 +273,39 @@ def species_2018_09_17():
 						" Tidewater Goby. Spatial constraint was {}. Run by Nick 9/17/18".format(presence_types, aggregation_level, spatial_constraint)
 	metadata.finish()
 
+def species_2018_10_09():
+	presence_types = "1,3,9"
+	spatial_constraint = "CONTIGUITY_EDGES_CORNERS"
+	aggregation_level = "species"
+	output_path = os.path.join(eflows_folder,
+							   r"data\report_update\scratch.gdb\noestuary_noempty_{}_aggregation_v14_2018_10_09".format(
+								   aggregation_level))
+	tbx_make_clusters.make_species_clusters(output_path=output_path,
+											group_name="Flow_Sensitive",
+											presence_values=presence_types, # current presence without translocations
+											min_species=1,
+											# this is a shortcut to remove all the out of state areas - don't cluster empty areas
+											num_groups=(2, 3, 4, 5, 6, 7, 8), # added two because great_basin region is especially wonky - see what happens with only two groups
+											huc_regions=os.path.join(eflows_folder, r"data\regions\regions.gdb\regions_noesturary_nodesert_2018_09_17"),
+											region_group_field="huc_region_group",
+											aggregation=aggregation_level,
+											spatial_constraint=spatial_constraint, )
+
+	metadata = arcpy_metadata.MetadataEditor(output_path)
+	metadata.purpose = "Rerun of 9/17/2018 run, with a PISCES bug that filtered HUCs to ones with the correct number of" \
+					   "minimum taxa fixed. Clustering of flow sensitive species aggregated to the {} level for PISCES presence values {}. This version" \
+					   "uses new regions where HUCs in HUC_10 1805000101 were moved from the north_coast region to the" \
+					   "central_valley because they all drain out Suisun Marsh and HUCs in the same HUC_10s as the San Francisco" \
+					   "Bay, including the Bay itself, were removed in order to get rid of weird behavior in North Coast" \
+					   "clustering. These estuary HUCs and the Delta HUCs will need to be managed separately from this" \
+					   "clustering. This version excludes empty areas. This version also reflects taxonomic changes and " \
+					   "corrections in PISCES, specifically to Roach subspecies and to the split between" \
+					   " Tidewater Goby. Spatial constraint was {}. Run by Nick 10/9/2018".format(presence_types,
+																								aggregation_level,
+																								spatial_constraint)
+	metadata.finish()
+
 if __name__ == "__main__":  # basically, this line only runs if this is the primary script being executed, rather than an imported file
 	# statewide_2018_09_16()
-	species_2018_09_17()
+	# species_2018_09_17()
+	species_2018_10_09()
