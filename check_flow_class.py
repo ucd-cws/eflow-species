@@ -5,11 +5,13 @@ import arcpy
 base_folder = os.path.split(os.path.abspath(__file__))[0]
 
 features_to_check = os.path.join(base_folder, r"data\contrib\flow_class.gdb\final_classification_9class")
-class_field = "CLASS"
-check_field = "check_status"
-check_code_field = "check_code"
-check_description_field = "check_description"
-downstream_field = "TOCOMID"  # needs to be configured to match the actual dataset - this must be joined in from NHDPlus
+CLASS_FIELD = "CLASS"
+CHECK_FIELD = "check_status"
+CHECK_CODE_FIELD = "check_code"
+CHECK_DESCRIPTION_FIELD = "check_description"
+DOWNSTREAM_FIELD = "TOCOMID"  # needs to be configured to match the actual dataset - this must be joined in from NHDPlus
+DRAINAGE_AREA_FIELD = "TotDASqKm"  ## TODO: Make this the correct field name - filling in the NHDPlus default info for now
+MAJOR_TRIBUTARY_THRESHOLD = 0.25  # What proportion of downstream flow must a segment comprise before it's a major tributary to downstream
 
 flow_class_codes = {
 	1: "SM",  # snowmelt
@@ -35,6 +37,7 @@ valid_downstreams = {
 	"HLP": ["SM", "HSR", "LSR", "GW", "HLP"],
 }
 
+
 def downstream_is_valid(upstream_class, downstream_class):
 	"""
 		Checks if the downstream class is a valid class to have for this segment based on both segments' classification
@@ -44,20 +47,24 @@ def downstream_is_valid(upstream_class, downstream_class):
 	"""
 	return flow_class_codes[downstream_class] in valid_downstreams[flow_class_codes[upstream_class]]
 
+
 nhd_segments = {}
 
-class NHDSegment:
+
+class NHDSegment(object):
 	comid = None
 	downstream_comid = None
 	flow_class = None
-	flag_status = "unchecked"
-	flag_code = None
-	flag_description = None
+	drainage_area = None
+	flag_status = []
+	flag_code = []
+	flag_description = []
 
-	def __init__(self, comid, downstream_comid, flow_class):
+	def __init__(self, comid, downstream_comid, flow_class, drainage_area):
 		self.comid = comid
 		self.downstream_comid = downstream_comid
 		self.flow_class = flow_class
+		self.drainage_area = drainage_area
 
 	@property
 	def downstream(self, comid=None):  # gets the downstream object if configured, or sets the downstream comid if comid is provided
@@ -71,6 +78,19 @@ class NHDSegment:
 			else:
 				raise ValueError("Downstream COMID {} is not present in the set of NHD Segments - can't evaluate".format(self.downstream_comid))
 
+	@property
+	def is_major_tributary(self):
+		"""
+			Checks if the upstream area in this segment is more than 25% of the total upstream area in the downstream segment.
+			If not, logic elsewhere will ignore the rules for this segment.
+		:return: boolean
+		"""
+
+		if self.drainage_area > 0.25 * self.downstream.drainage_area:
+			return True
+		else:
+			return False
+
 
 if __name__ == "__main__":  # if this is the main script and hasn't been imported
 	print("Getting information about the input")
@@ -83,19 +103,19 @@ if __name__ == "__main__":  # if this is the main script and hasn't been importe
 	# first short text is just 3 values "valid", "invalid", "unchecked" (or something)
 	# second short text is a common code for the error - "invalid_downstream" or "short_river" or something like that
 	# long field is a description of the error - "downstream code of ____ is not valid for segment with code ___
-	if check_field not in field_names:
-		arcpy.AddField_management(features_to_check, check_field, "TEXT")
-	if check_code_field not in field_names:
-			arcpy.AddField_management(features_to_check, check_code_field, "TEXT")
-	if check_description_field not in field_names:
-			arcpy.AddField_management(features_to_check, check_description_field, "TEXT")
+	if CHECK_FIELD not in field_names:
+		arcpy.AddField_management(features_to_check, CHECK_FIELD, "TEXT")
+	if CHECK_CODE_FIELD not in field_names:
+			arcpy.AddField_management(features_to_check, CHECK_CODE_FIELD, "TEXT")
+	if CHECK_DESCRIPTION_FIELD not in field_names:
+			arcpy.AddField_management(features_to_check, CHECK_DESCRIPTION_FIELD, "TEXT")
 
 	data_input = arcpy.SearchCursor(features_to_check)
 
 	print("Reading Data")
 	# read the data in so we can arbitrarily jump around it
 	for row in data_input:
-		nhd_segments[row.getValue("COMID")] = NHDSegment(row.getValue("COMID"), row.getValue(downstream_field), row.getValue(class_field))
+		nhd_segments[row.getValue("COMID")] = NHDSegment(row.getValue("COMID"), row.getValue(DOWNSTREAM_FIELD), row.getValue(CLASS_FIELD))
 	del data_input  # clear out the cursor
 
 	# now we have all the data in a structure we can traverse
@@ -111,17 +131,26 @@ if __name__ == "__main__":  # if this is the main script and hasn't been importe
 		try:
 			downstream_flow_class = nhd_segments[comid].downstream.flow_class
 		except ValueError as e:
-			nhd_segments[comid].flag_status = "flagged"
-			nhd_segments[comid].flag_code = "network_issue"
-			nhd_segments[comid].flag_description = "The status of this segment was unable to be evaluated due to coding or incorrect network information - error raised was \"{}\"".format(str(e))
+			nhd_segments[comid].flag_status.append("flagged")
+			nhd_segments[comid].flag_code.append("network_issue")
+			nhd_segments[comid].flag_description.append("The status of this segment was unable to be evaluated due to coding or incorrect network information - error raised was \"{}\"".format(str(e)))
+			continue
+
+		if not nhd_segments[comid].is_major_tributary:
+			if len(nhd_segments[comid].downstream.flag_status) == 0:  # only set the status if there *is* no status already - we'll likely overwrite it later when we get the major tributary
+				nhd_segments[comid].downstream.flag_status.append("skipped")  # set it to skipped so that we know if there was no major trib. If there is, it'll be overwritten. We're more likely to get two major tribs, probably
+				nhd_segments[comid].flag_code.append("skipped")
+				nhd_segments[comid].flag_description.append("skipped")
 			continue
 
 		if not downstream_is_valid(upstream_class=flow_class, downstream_class=downstream_flow_class):
-			nhd_segments[comid].downstream.flag_status = "flagged"
-			nhd_segments[comid].downstream.flag_code = "suspect_flow_code"
-			nhd_segments[comid].downstream.flag_description = "Flow class of {} is not in the accepted downstream flow classes for flow class {} from upstream COMID {}".format(downstream_flow_class, flow_class, comid)
+			nhd_segments[comid].downstream.flag_status.append("flagged")
+			nhd_segments[comid].downstream.flag_code.append("suspect_flow_code")
+			nhd_segments[comid].downstream.flag_description.append("Flow class of {} is not in the accepted downstream flow classes for flow class {} from upstream COMID {}".format(downstream_flow_class, flow_class, comid))
 		else:
-			nhd_segments[comid].downstream.flag_status = "checked"
+			nhd_segments[comid].downstream.flag_status.append("checked")
+			nhd_segments[comid].flag_code.append("checked")
+			nhd_segments[comid].flag_description.append("checked")
 
 
 	print("Writing Results")
@@ -129,7 +158,7 @@ if __name__ == "__main__":  # if this is the main script and hasn't been importe
 	data_output = arcpy.UpdateCursor(features_to_check)
 	for row in data_output:
 		nhd_segment = nhd_segments[row.getValue("COMID")]
-		row.setValue(check_field, nhd_segment.flag_status)
-		row.setValue(check_code_field, nhd_segment.flag_code)
-		row.setValue(check_description_field, nhd_segment.flag_description)
+		row.setValue(CHECK_FIELD, ",".join(nhd_segment.flag_status))
+		row.setValue(CHECK_CODE_FIELD, ",".join(nhd_segment.flag_code))
+		row.setValue(CHECK_DESCRIPTION_FIELD, ",".join(nhd_segment.flag_description))
 		data_output.updateRow(row)
