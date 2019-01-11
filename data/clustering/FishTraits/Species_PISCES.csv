@@ -1,0 +1,341 @@
+objectid,fid,family,genus,species,subspecies,scientific_name,taxonomic_unit,common_name,notes,native,image_location,TEMPORARY
+1,PET01,Petromyzontidae,Entosphenus,tridentata,,Entosphenus tridentata,subspecies,Pacific lamprey,,1,,0
+2,PET02,Petromyzontidae,Entosphenus,tridentata,,Entosphenus tridentata,subspecies,Goose Lake lamprey,,1,,0
+3,PES01,Petromyzontidae,Entosphenus,similis,,Entosphenus similis,species,Klamath River lamprey,,1,,0
+4,PLA01,Petromyzontidae,Lampetra,ayersi,,Lampetra ayersi,species,River lamprey,,1,,0
+5,PLH01,Petromyzontidae,Lampetra,hubbsi,,Lampetra hubbsi,species,Kern brook lamprey,,1,,0
+6,PLR01,Petromyzontidae,Lampetra,richardsoni,,Lampetra richardsoni,species,Western brook lamprey,,1,,0
+7,PLL01,Petromyzontidae,Lampetra,lethophaga,,Lampetra lethophaga,species,Pit-Klamath brook lamprey,,1,,0
+8,AAM01,Acipenseridae,Acipenser,medirostris,,Acipenser medirostris,DPS,Northern green sturgeon,,1,,0
+9,AAM02,Acipenseridae,Acipenser,medirostris,,Acipenser medirostris,DPS,Southern green sturgeon,,1,,0
+10,AAT01,Acipenseridae,Acipenser,transmontanus,,Acipenser transmontanus,species,White sturgeon,,1,,0
+11,CSC01,Cyprinidae,Siphatales,crassicauda,,Siphatales crassicauda,species,Thicktail chub,,1,,0
+12,CST01,Cyprinidae,Siphatales,thalassinus,thalassinus,Siphatales thalassinus thalassinus,subspecies,Goose Lake tui chub,,1,images\TuiChub-Owens.jpg,0
+13,CST02,Cyprinidae,Siphatales,thalassinus,,Siphatales thalassinus subspecies,subspecies,Pit River tui chub,,1,images\TuiChub-Owens.jpg,0
+14,CST03,Cyprinidae,Siphatales,thalassinus,vaccaceps,Siphatales thalassinus vaccaceps,subspecies,Cow Head tui chub,,1,images\TuiChub-Owens.jpg,0
+15,CSB01,Cyprinidae,Siphatales,bicolor,bicolor,Siphatales bicolor bicolor,subspecies,Klamath tui chub,,1,images\TuiChub-Owens.jpg,0
+16,CSB02,Cyprinidae,Siphatales,bicolor,,Siphatales bicolor subspecies,subspecies,High Rock Springs tui chub,,1,images\TuiChub-Owens.jpg,0
+17,CSB03,Cyprinidae,Siphatales,bicolor,pectinifer,Siphatales bicolor pectinifer,subspecies,Lahontan lake tui chub,,1,images\TuiChub-Owens.jpg,0
+18,CSB04,Cyprinidae,Siphatales,bicolor,obesus,Siphatales bicolor obesus,subspecies,Lahontan stream tui chub,,1,images\TuiChub-Owens.jpg,0
+19,CSB05,Cyprinidae,Siphatales,bicolor,,Siphatales bicolor subspecies,subspecies,Eagle Lake tui chub,,1,images\TuiChub-Owens.jpg,0
+20,CSB06,Cyprinidae,Siphatales,bicolor,snyderi,Siphatales bicolor snyderi,subspecies,Owens tui chub,,1,images\TuiChub-Owens.jpg,0
+21,CSM01,Cyprinidae,Siphatales,mohavensis,,Siphatales mohavensis,species,Mojave tui chub,,1,images\TuiChub-Owens.jpg,0
+22,CGE01,Cyprinidae,Gila,elegans,,Gila elegans,species,Bonytail,,1,,0
+23,CGC01,Cyprinidae,Gila,coerulea,,Gila coerulea,species,Blue chub,,1,,0
+24,CGO01,Cyprinidae,Gila,orcutti,,Gila orcutti,species,Arroyo chub,,1,,0
+25,CRE01,Cyprinidae,Richardsonius,egregius,,Richardsonius egregius,species,Lahontan redside,,1,images\LahontanRedside.jpg,0
+26,CLE01,Cyprinidae,Lavinia,exilicauda,exilicauda,Lavinia exilicauda exilicauda,subspecies,Sacramento hitch,,1,,0
+27,CLE02,Cyprinidae,Lavinia,exilicauda,chi,Lavinia exilicauda chi,subspecies,Clear Lake hitch,,1,,0
+28,CLE03,Cyprinidae,Lavinia,exilicauda,harengeus,Lavinia exilicauda harengeus,subspecies,Monterey hitch,,1,,0
+29,CLS01,Cyprinidae,Hesperoleucus,symmetricus,symmetricus,Hesperoleucus symmetricus symmetricus,subspecies,California roach,modified - Peter roach split 2018,1,,0
+30,CLS02,Cyprinidae,Hesperoleucus,symmetricus,,Hesperoleucus symmetricus subspecies,subspecies,Red Hills roach,modified - Peter roach split 2018,1,,0
+31,CLS03,Cyprinidae,Hesperoleucus,symmetricus,,Hesperoleucus symmetricus subspecies,subspecies,Northern coastal roach,modified - Peter roach split 2018,1,,0
+32,CLS04,Cyprinidae,Hesperoleucus,symmetricus,,Hesperoleucus symmetricus subspecies,subspecies,Clear Lake roach,modified - Peter roach split 2018,1,,0
+33,CLS05,Cyprinidae,Hesperoleucus,symmetricus,subditus,Hesperoleucus symmetricus subditus,subspecies,Southern coastal roach,modified - Peter roach split 2018,1,,0
+34,CLS06,Cyprinidae,Hesperoleucus,symmetricus,navarroensis,Hesperoleucus symmetricus navarroensis,subspecies,Navarro roach,modified - Peter roach split 2018,0,,0
+35,CLS07,Cyprinidae,Hesperoleucus,symmetricus,,Hesperoleucus symmetricus subspecies,subspecies,Tomales roach,modified - Peter roach split 2018,0,,0
+36,CLP01,Cyprinidae,Hesperoleucus,parvipinnus,,Hesperoleucus parvipinnus,species,Gualala roach,modified - Peter roach split 2018,1,,0
+37,CLS08,Cyprinidae,Hesperoleucus,symmetricus,mitrulus,Hesperoleucus mitrulus,subspecies,Northern roach,modified - Peter roach split 2018,1,,0
+38,COM01,Cyprinidae,Orthodon,microlepidotus,,Orthodon microlepidotus,species,Sacramento blackfish,,1,,0
+39,CPM01,Cyprinidae,Pogonichthys,macrolepidotus,,Pogonichthys macrolepidotus,species,Sacramento splittail,,1,,0
+40,CPC01,Cyprinidae,Pogonichthys,ciscoides,,Pogonichthys ciscoides,species,Clear Lake splittail,,1,,0
+41,CMC01,Cyprinidae,Mylopharodon,conocephalus,,Mylopharodon conocephalus,species,Hardhead,,1,,0
+42,CPG01,Cyprinidae,Ptychocheilus,grandis,,Ptychocheilus grandis,species,Sacramento pikeminnow,,1,images\Pikeminnow.jpg,0
+43,CPL01,Cyprinidae,Ptychocheilus,lucius,,Ptychocheilus lucius,species,Colorado pikeminnow,,1,images\Pikeminnow.jpg,0
+44,CRO01,Cyprinidae,Rhinichthys,osculus,,Rhinichthys osculus subspecies,subspecies,Sacramento speckled dace,,1,images\SpeckledDace.jpg,0
+45,CRO02,Cyprinidae,Rhinichthys,osculus,robustus,Rhinichthys osculus robustus,subspecies,Lahontan speckled dace,,1,images\SpeckledDace.jpg,0
+46,CRO03,Cyprinidae,Rhinichthys,osculus,klamathensis,Rhinichthys osculus klamathensis,subspecies,Klamath speckled dace,,1,images\SpeckledDace.jpg,0
+47,CRO04,Cyprinidae,Rhinichthys,osculus,,Rhinichthys osculus subspecies,subspecies,Owens speckled dace,,1,images\SpeckledDace.jpg,0
+48,CRO05,Cyprinidae,Rhinichthys,osculus,,Rhinichthys osculus subspecies,subspecies,Long Valley speckled dace,,1,images\SpeckledDace.jpg,0
+49,CRO06,Cyprinidae,Rhinichthys,osculus,nevadensis,Rhinichthys osculus nevadensis,subspecies,Amargosa Canyon speckled dace,,1,images\SpeckledDace.jpg,0
+50,CRO07,Cyprinidae,Rhinichthys,osculus,,Rhinichthys osculus subspecies,subspecies,Santa Ana speckled dace,,1,images\SpeckledDace.jpg,0
+51,CCT01,Catostomidae,Catostomus,tahoensis,,Catostomus tahoensis,species,Tahoe sucker,,1,images\TahoeSucker.jpg,0
+52,CCF01,Catostomidae,Catostomus,fumeiventris,,Catostomus fumeiventris,species,Owens sucker,,1,images\OwensSucker.jpg,0
+53,CCP01,Catostomidae,Pantosteus,lahontan,,Pantosteus lahontan,species,Lahontan mountain sucker,,1,images\MountainSucker.jpg,0
+54,CCO01,Catostomidae,Catostomus,occidentalis,occidentalis,Catostomus occidentalis occidentalis,species,Sacramento sucker,,1,images\SacramentoSucker.jpg,0
+55,CCO02,Catostomidae,Catostomus,occidentalis,lacusanserinus,Catostomus occidentalis lacusanserinus,subspecies,Goose Lake sucker,,1,,0
+56,CCO03,Catostomidae,Catostomus,occidentalis,mnioltiltus,Catostomus occidentalis mnioltiltus,subspecies,Monterey sucker,,1,,0
+57,CCO04,Catostomidae,Catostomus,occidentalis,humboldtianus,Catostomus occidentalis humboldtianus,subspecies,Humboldt sucker,,1,,0
+58,CCM01,Catostomidae,Catostomus,microps,,Catostomus microps,species,Modoc sucker,,1,images\ModocSucker.gif,0
+59,CCR01,Catostomidae,Catostomus,rimiculus,,Catostomus rimiculus,species,Klamath smallscale sucker,,1,,0
+60,CCS01,Catostomidae,Catostomus,snyderi,,Catostomus snyderi,species,Klamath largescale sucker,,1,,0
+61,CCL01,Catostomidae,Catostomus,luxatus,,Catostomus luxatus,species,Lost River sucker,,1,,0
+62,CCS02,Catostomidae,Catostomus,santaanae,,Catostomus santaanae,species,Santa Ana sucker,,1,,0
+63,CCL02,Catostomidae,Catostomus,latipinnis,,Catostomus latipinnis,species,Flannelmouth sucker,,1,,0
+64,CCB01,Catostomidae,Chasmistes,brevirostris,,Chasmistes brevirostris,species,Shortnose sucker,,1,,0
+65,CXT01,Catostomidae,Xyrauchen,texanus,,Xyrauchen texanus,species,Razorback sucker,,1,,0
+66,OTP01,Osmeridae,Thaleichthys,pacificus,,Thaleichthys pacificus,DPS,Eulachon,,1,,0
+67,OST01,Osmeridae,Spirinchus,thaleichthys,,Spirinchus thaleichthys,species,Longfin smelt,,1,,0
+68,OHP01,Osmeridae,Hypomesus,pacificus,,Hypomesus pacificus,species,Delta smelt,,1,,0
+69,SPW01,Salmonidae,Prosopium,williamsoni,,Prosopium williamsoni,species,Mountain whitefish,,1,images\MountainWhitefish.jpg,0
+70,SSC01,Salmonidae,Salvelinus,confluentus,,Salvelinus confluentus,species,Bull trout,,1,,0
+71,SOT01,Salmonidae,Oncorhynchus,tshawytscha,,Oncorhynchus tshawytscha,ESU,Upper Klamath-Trinity fall Chinook salmon,,1,images\Chinook.jpg,0
+72,SOT02,Salmonidae,Oncorhynchus,tshawytscha,,Oncorhynchus tshawytscha,ESU,Upper Klamath-Trinity spring Chinook salmon,,1,images\Chinook.jpg,0
+73,SOT03,Salmonidae,Oncorhynchus,tshawytscha,,Oncorhynchus tshawytscha,ESU,Southern Oregon Northern California coast fall Chinook salmon,,1,images\Chinook.jpg,0
+74,SOT04,Salmonidae,Oncorhynchus,tshawytscha,,Oncorhynchus tshawytscha,ESU,California Coast fall Chinook salmon,,1,images\Chinook.jpg,0
+75,SOT05,Salmonidae,Oncorhynchus,tshawytscha,,Oncorhynchus tshawytscha,ESU,Central Valley winter Chinook salmon,,1,images\Chinook.jpg,0
+76,SOT06,Salmonidae,Oncorhynchus,tshawytscha,,Oncorhynchus tshawytscha,ESU,Central Valley spring Chinook salmon,,1,images\Chinook.jpg,0
+77,SOT07,Salmonidae,Oncorhynchus,tshawytscha,,Oncorhynchus tshawytscha,ESU,Central Valley late fall Chinook salmon,,1,images\Chinook.jpg,0
+78,SOT08,Salmonidae,Oncorhynchus,tshawytscha,,Oncorhynchus tshawytscha,ESU,Central Valley fall Chinook salmon,,1,images\Chinook.jpg,0
+79,SOK01,Salmonidae,Oncorhynchus,kisutch,,Oncorhynchus kisutch,ESU,Central Coast coho salmon,,1,,0
+80,SOK02,Salmonidae,Oncorhynchus,kisutch,,Oncorhynchus kisutch,ESU,Southern Oregon Northern California coast coho salmon,,1,,0
+81,SOG01,Salmonidae,Oncorhynchus,gorbuscha,,Oncorhynchus gorbuscha,ESU,Pink salmon,,1,,0
+82,SOK03,Salmonidae,Oncorhynchus,keta,,Oncorhynchus keta,ESU,Chum salmon,,1,,0
+83,SOM01,Salmonidae,Oncorhynchus,mykiss,,Oncorhynchus mykiss,DPS,Northern California coast winter steelhead,,1,,0
+84,SOM02,Salmonidae,Oncorhynchus,mykiss,,Oncorhynchus mykiss,ESU,Northern California coast summer steelhead,,1,,0
+85,SOM03,Salmonidae,Oncorhynchus,mykiss,,Oncorhynchus mykiss,DPS,Klamath Mountains Province winter steelhead,,1,,0
+86,SOM04,Salmonidae,Oncorhynchus,mykiss,,Oncorhynchus mykiss,DPS,Klamath Mountains Province summer steelhead,,1,,0
+87,SOM05,Salmonidae,Oncorhynchus,mykiss,,Oncorhynchus mykiss,DPS,Central California coast winter steelhead,,1,,0
+88,SOM06,Salmonidae,Oncorhynchus,mykiss,,Oncorhynchus mykiss,DPS,Central Valley steelhead,,1,,0
+89,SOM07,Salmonidae,Oncorhynchus,mykiss,,Oncorhynchus mykiss,DPS,South Central California coast steelhead,,1,,0
+90,SOM08,Salmonidae,Oncorhynchus,mykiss,,Oncorhynchus mykiss,DPS,Southern California steelhead,,1,,0
+91,SOM09,Salmonidae,Oncorhynchus,mykiss,irideus,Oncorhynchus mykiss irideus,subspecies,Coastal rainbow trout,,1,images\CoastalRainbow.jpg,0
+92,SOM10,Salmonidae,Oncorhynchus,mykiss,stonei,Oncorhynchus mykiss stonei,subspecies,McCloud River redband trout,,1,images\RedbandTrout.jpg,0
+93,SOM11,Salmonidae,Oncorhynchus,mykiss,,Oncorhynchus mykiss subspecies,subspecies,Goose Lake redband trout,,1,images\RedbandTrout.jpg,0
+94,SOM12,Salmonidae,Oncorhynchus,mykiss,aquilarum,Oncorhynchus mykiss aquilarum,subspecies,Eagle Lake rainbow trout,,1,images\EagleLakeRainbow.jpg,0
+95,SOM13,Salmonidae,Oncorhynchus,mykiss,gilberti,Oncorhynchus mykiss gilberti,subspecies,Kern River rainbow trout,,1,,0
+96,SOM14,Salmonidae,Oncorhynchus,mykiss,aguabonita,Oncorhynchus mykiss aguabonita,subspecies,California golden trout,,1,images\GoldenTrout.jpg,0
+97,SOM15,Salmonidae,Oncorhynchus,mykiss,whitei,Oncorhynchus mykiss whitei,subspecies,Little Kern golden trout,,1,,0
+98,SOC01,Salmonidae,Oncorhynchus,clarki,clarki,Oncorhynchus clarki clarki,subspecies,Coastal cutthroat trout,,1,,0
+99,SOC02,Salmonidae,Oncorhynchus,clarki,seleneris,Oncorhynchus clarki seleneris,subspecies,Paiute cutthroat trout,,1,images\PaiuteCutthroat.jpg,0
+100,SOC03,Salmonidae,Oncorhynchus,clarki,henshawi,Oncorhynchus clarki henshawi,subspecies,Lahontan cutthroat trout,,1,images\LCT.jpg,0
+101,CFP01,Cyprinodontidae,Fundulus,parvipinnis,,Fundulus parvipinnis,species,California killifish,Not freshwater reproducing,1,,0
+102,CCM02,Cyprinodontidae,Cyprinodon,macularius,,Cyprinodon macularius,species,Desert pupfish,,1,,0
+103,CCR02,Cyprinodontidae,Cyprinodon,radiosus,,Cyprinodon radiosus,species,Owens pupfish,,1,,0
+104,CCN01,Cyprinodontidae,Cyprinodon,nevadensis,nevadensis,Cyprinodon nevadensis nevadensis,subspecies,Saratoga Springs pupfish,,1,,0
+105,CCN02,Cyprinodontidae,Cyprinodon,nevadensis,amargosae,Cyprinodon nevadensis amargosae,subspecies,Amargosa River pupfish,,1,,0
+106,CCN03,Cyprinodontidae,Cyprinodon,nevadensis,calidae,Cyprinodon nevadensis calidae,subspecies,Tecopa pupfish,,1,,0
+107,CCN04,Cyprinodontidae,Cyprinodon,nevadensis,shoshone,Cyprinodon nevadensis shoshone,subspecies,Shoshone pupfish,,1,,0
+108,CCS03,Cyprinodontidae,Cyprinodon,salinus,salinus,Cyprinodon salinus salinus,subspecies,Salt Creek pupfish,,1,,0
+109,CCS04,Cyprinodontidae,Cyprinodon,salinus,milleri,Cyprinodon salinus milleri,subspecies,Cottonball Marsh pupfish,,1,,0
+110,CCA01,Cottidae,Cottus,asperrimus,,Cottus asperrimus,species,Rough sculpin,,1,,0
+111,CCK01,Cottidae,Cottus,klamathensis,macrops,Cottus klamathensis macrops,subspecies,Bigeye marbled sculpin,,1,,0
+112,CCK02,Cottidae,Cottus,klamathensis,polyporus,Cottus klamathensis polyporus,subspecies,Lower Klamath marbled sculpin,,1,,0
+113,CCK03,Cottidae,Cottus,klamathensis,klamathensis,Cottus klamathensis klamathensis,subspecies,Upper Klamath marbled sculpin,,1,,0
+114,CCA02,Cottidae,Cottus,asper,,Cottus asper subspecies,subspecies,Prickly sculpin,,1,images\PricklySculpin.jpg,0
+115,CCA03,Cottidae,Cottus,asper,,Cottus asper subspecies,subspecies,Clear Lake prickly sculpin,,1,,0
+116,CCA04,Cottidae,Cottus,aleuticus,,Cottus aleuticus,species,Coastrange sculpin,,1,,0
+117,CCG01,Cottidae,Cottus,gulosus,,Cottus gulosus,species,Riffle sculpin,,1,images\RiffleSculpin.jpg,0
+118,CCP02,Cottidae,Cottus,pitensis,,Cottus pitensis,species,Pit sculpin,,1,images\PitSculpin.jpg,0
+119,CCB02,Cottidae,Cottus,beldingi,,Cottus beldingi,species,Paiute sculpin,,1,images\PaiuteSculpin.jpg,0
+120,CCP03,Cottidae,Cottus,perplexus,,Cottus perplexus,species,Reticulate sculpin,,1,,0
+121,CLA01,Cottidae,Leptocottus,armatus,,Leptocottus armatus,species,Staghorn sculpin,Not freshwater reproducing,1,,0
+122,GGA01,Gasterosteidae,Gasterosteus,aculeatus,aculeatus,Gasterosteus aculeatus aculeatus,subspecies,Coastal threespine stickleback,,1,,0
+123,GGA02,Gasterosteidae,Gasterosteus,aculeatus,microcephalus,Gasterosteus aculeatus microcephalus,subspecies,Inland threespine stickleback,,1,,0
+124,GGA03,Gasterosteidae,Gasterosteus,aculeatus,williamsoni,Gasterosteus aculeatus williamsoni,subspecies,Unarmored threespine stickleback,,1,,0
+125,GGA04,Gasterosteidae,Gasterosteus,aculeatus,,Gasterosteus aculeatus subspecies,subspecies,Shay Creek stickleback,,1,,0
+126,CAI01,Centrarchidae,Archoplites,interruptus,,Archoplites interruptus,species,Sacramento perch,,1,,0
+127,EHT01,Embiotocidae,Hysterocarpus,traskii,traskii,Hysterocarpus traskii traskii,subspecies,Sacramento tule perch,,1,,0
+128,EHT02,Embiotocidae,Hysterocarpus,traskii,pomo,Hysterocarpus traskii pomo,subspecies,Russian River tule perch,,1,,0
+129,EHT03,Embiotocidae,Hysterocarpus,traskii,lagunae,Hysterocarpus traskii lagunae,subspecies,Clear Lake tule perch,,1,,0
+130,SSF01,Salmonidae,Salvelinus,fontinalis,,Salvelinus fontinalis,species,Brook Trout,,0,,0
+131,SST01,Salmonidae,Salmo,trutta,,Salmo trutta,species,Brown Trout,,0,,0
+132,SON01,Salmonidae,Oncorhynchus,nerka,,Onchorynchus nerka,species,Sockeye (Kokanee) Salmon,,0,,0
+133,CLC01,Centrarchidae,Lepomis,cyanellus,,Lepomis cyanellus,species,Green sunfish,,0,,0
+134,CLM02,Centrarchidae,Lepomis,macrochirus,,Lepomis macrochirus,species,Bluegill,,0,,0
+135,CMD01,Centrarchidae,Micropterus,dolomieu,,Micropterus dolomieu,species,Smallmouth Bass,,0,,0
+136,CMS01,Centrarchidae,Micropterus,salmoides,,Micropterus salmoides,species,Largemouth Bass,,0,,0
+137,CAS01,Clupeidae,Alosa,sapidissima,,Alosa sapidissima,species,American Shad,,0,,0
+138,STA01,Salmonidae,Thymallus,arcticus,,Thymallus arcticus,species,Arctic grayling,no longer established in CA,0,,0
+139,RCB01,Rivulidae,Cynolebias,bellottii,,Cynolebias bellottii,species,Argentine pearlfish,not established in CA,0,,0
+140,GCI01,Gobiidae,Clevelandia,ios,,Clevelandia ios,species,Arrow goby,marine,0,,0
+141,SSA01,Syngnathidae,Syngnathus,auliscus,,Syngnathus auliscus,species,Barred Pipefish,marine,0,,0
+142,CIC01,Catostomidae,Ictiobus,cyprinellus,,Ictiobus cyprinellus,species,Bigmouth buffalo,not established in CA,0,,0
+143,GAF01,Gobiidae,Acanthogobius,flavimanus,,Acanthogobius flavimanus,species,Yellowfin goby,,0,,0
+144,IAC01,Ictaluridae,Ameiurus,catus,,Ameiurus catus ,species,White catfish,,0,,0
+145,IAM01,Ictaluridae,Ameiurus,melas,,Ameiurus melas ,species,Black bullhead,,0,,0
+146,IAN01,Ictaluridae,Ameiurus,natalis,,Ameiurus natalis ,species,Yellow bullhead,,0,,0
+147,IAN02,Ictaluridae,Ameiurus,nebulosus,,Ameiurus nebulosus,species,Brown bullhead,,0,,0
+148,AAA01,Atherinopsidae,Atherinops,affinis,,Atherinops affinis ,species,Topsmelt,marine,0,,0
+149,CCA05,Cyprinidae,Carassius,auratus,,Carassius auratus,species,Goldfish,,0,,0
+150,CCA06,Cottidae,Clinocottus,acuticeps,,Clinocottus acuticeps,species,Sharpnose sculpin,marine,0,,0
+151,CCH01,Clupeidae,Clupea,harengeus,pallasii,Clupea harengeus pallasii,subspecies,Pacific herring,marine,0,,0
+152,CCP04,Cottidae,Cottus,princeps,,Cottus princeps,species,Klamath lake sculpin,Oregon only,0,,0
+153,CCT02,Cottidae,Cottus,tenuis,,Cottus tenuis,species,Slender sculpin,,0,,0
+154,CCI01,Cyprinidae,Ctenopharyngodon,idella,,Ctenopharyngodon idella,species,Grass carp,Pop. sterile(?) introduced for weed control,0,,0
+155,GCI02,Gasterosteidae,Culaea,inconstans,,Culaea inconstans,species,Brook stickleback,,0,,0
+156,ECA01,Embiotocidae,Cymatogaster,aggregata,,Cymatogaster aggregata,species,Shiner perch,marine/brackish,0,,0
+157,SCP01,Sciaenidae,Cynoscion,parvipinnis,,Cynoscion parvipinnis,species,Shortfin corvina,marine,0,,0
+158,CCL03,Cyprinidae,Cyprinella,lutrensis,,Cyprinella lutrensis,species,Red shiner,,0,,0
+159,CCC01,Cyprinidae,Cyprinus,carpio ,,Cyprinus carpio ,species,Common carp,,0,,0
+160,CDP01,Clupeidae,Dorosoma,petenense,,Dorosoma petenense,species,Threadfin shad,,0,,0
+161,GEN01,Gobiidae,Eucyclogobius,newberryi,,Eucyclogobius newberryi,species,Tidewater goby,,1,,0
+162,PGA01,Poeciliidae,Gambusia,affinis ,,Gambusia affinis ,species,Western mosquitofish,,0,,0
+163,GGA05,Gasterosteidae,Gasterosteus,aculeatus ,,Gasterosteus aculeatus subspecies,subspecies,Threespine stickleback (bin),,0,,1
+165,GGM01,Gobiidae,Gillichthys,mirabilis,,Gillichthys mirabilis,species,Longjaw mudsucker,,0,,0
+166,GCS01,Gobiidae,Ctenogobius,sagittula,,Ctenogobius sagittula,species,Longtail goby,,0,,0
+167,CHS01,Cyprinidae,Hesperoleucus,symmetricus,,Hesperoleucus symmetricus,species,Empty data bin - California roach,,0,,1
+168,OHN01,Osmeridae,Hypomesus,nipponensis,,Hypomesus nipponensis,species,Wakasagi,,0,,0
+169,OHP02,Osmeridae,Hypomesus,pretiosus,,Hypomesus pretiosus,species,Surf smelt,marine,0,,0
+170,PPG01,Pleuronectidae,Pleuronichthys,guttulata,,Hypsopsetta guttulata,species,Diamond turbot,marine,0,,0
+171,EHT04,Embiotocidae,Hysterocarpus,traskii ,,Hysterocarpus traskii ,species,Tule perch (bin),,0,,1
+172,IIF01,Ictaluridae,Ictalurus,furcatus,,Ictalurus furcatus,species,Blue catfish,,0,,0
+173,IIP01,Ictaluridae,Ictalurus,punctatus,,Ictalurus punctatus,species,Channel catfish,,0,,0
+174,PLP01,Petromyzontidae,Lampetra,pacifica,,Lampetra pacifica,species,Pacific brook lamprey,,0,,0
+176,CLE04,Cyprinidae,Lavinia,exilicauda ,,Lavinia exilicauda subspecies,subspecies,Hitch (bin),,0,,1
+177,CLG01,Centrarchidae,Lepomis,gibbosus ,,Lepomis gibbosus ,species,Pumpkinseed,,0,,0
+178,CLG02,Centrarchidae,Lepomis,gulosus ,,Lepomis gulosus ,species,Warmouth,,0,,0
+179,CLM03,Centrarchidae,Lepomis,microlophus ,,Lepomis microlophus ,species,Redear sunfish,,0,,0
+180,FLP01,Fundulidae,Lucania,parva,,Lucania parva,species,Rainwater killifish ,,0,,0
+181,MMB02,Menidiinae,Menidia,beryllina,,Menidia beryllina subspecies,subspecies,Mississippi silversides,,0,,0
+182,MMB01,Menidiinae,Menidia,beryllina,,Menidia beryllina subspecies,subspecies,Inland silverside,now Mississippi silversides,0,,1
+183,CMC02,Centrarchidae,Micropterus,coosae,,Micropterus coosae,species,Redeye bass,,0,,0
+184,CMP01,Centrarchidae,Micropterus,punctulatus ,,Micropterus punctulatus ,species,Spotted bass,,0,,0
+185,MMC01,Moronidae,Morone,chrysops,,Morone chrysops,species,White bass,,0,,0
+186,MMS01,Moronidae,Morone,saxatilis,,Morone saxatilis,species,Striped bass,,0,,0
+187,MMC02,Mugilidae,Mugil,cephalus,,Mugil cephalus,species,Striped mullet,Not freshwater reproducing,1,,0
+188,CNC01,Cyprinidae,Notemigonus,crysoleucas,,Notemigonus crysoleucas,species,Golden shiner,,0,,0
+189,SOC04,Salmonidae,Oncorhynchus,clarkii ,,Oncorhynchus clarkii subspecies,subspecies,Cutthroat trout (bin),,0,,1
+190,SOM16,Salmonidae,Oncorhynchus,mykiss,newberrii,Oncorhynchus mykiss newberrii,subspecies,Redband trout (bin),,0,images\RedbandTrout.jpg,1
+191,COM02,Cyprinidae,Orthodon,microlepidotus,,Orthodon microlepidotus,species,Blackfish (bin),,0,,1
+193,PPC01,Paralichthyidae,Paralichthys,californicus,,Paralichthys californicus,species,California halibut,marine,0,,0
+194,PPF01,Percidae,Perca,flavescens,,Perca flavescens,species,Yellow perch,,0,,0
+195,PPM01,Percidae,Percina,macrolepida,,Percina macrolepida,species,Bigscale logperch,,0,,0
+196,CPP01,Cyprinidae,Pimephales,promelas,,Pimephales promelas,species,Fathead minnow,,0,,0
+197,PPS01,Pleuronectidae,Platichthys,stellatus,,Platichthys stellatus,species,Starry flounder,Not freshwater reproducing,1,,0
+198,PPL01,Poeciliidae,Poecilia,latipinna,,Poecilia latipinna,species,Sailfin molly,,0,,0
+199,PPM02,Poeciliidae,Poecilia,mexicana,,Poecilia mexicana,species,Shortfin molly,,0,,0
+200,PPR01,Poeciliidae,Poecilia,reticulata,,Poecilia reticulata,species,Guppy,,0,,0
+201,CPA01,Centrarchidae,Pomoxis,annularis,,Pomoxis annularis,species,White crappie,,0,,0
+202,CPN01,Centrarchidae,Pomoxis,nigromaculatus,,Pomoxis nigromaculatus,species,Black crappie,,0,,0
+203,IPO01,Ictaluridae,Pylodictis,olivaris,,Pylodictis olivaris,species,Flathead Catfish,,0,,0
+204,SSC02,Salmonidae,Salvelinus,confluentus,,Salvelinus confluentus,species,Coastal dolly varden,Bull trout,0,,0
+205,SSC03,Salmonidae,Salvelinus,confluentus,,Salvelinus confluentus,species,Dolly varden,Bull trout,0,,0
+206,SSN01,Salmonidae,Salvelinus,namaycush,,Salvelinus namaycush,species,Lake trout,,0,,0
+207,CTT01,Cyprinidae,Tinca,tinca,,Tinca tinca,species,Tench,,0,,0
+208,GTT01,Gobiidae,Tridentiger,trigonocephalus,,Tridentiger trigonocephalus,species,Chameleon goby,marine,0,,0
+209,PXH01,Poeciliidae,Xiphophorus,hellerii,,Xiphophorus hellerii,species,Green swordtail,,0,,0
+210,SOT09,Salmonidae,Oncorhynchus,tshawytscha,,Oncorhynchus tshawytscha,species,Chinook Salmon (bin),,0,images\Chinook.jpg,1
+211,CCK04,Cottidae,Cottus,klamathensis,,Cottus klamathensis,species,Marbled Sculpin (bin),Catchall for uncertain marbled sculpin mapping,0,,1
+212,SOM17,Salmonidae,Oncorhynchus,mykiss,,Onchorynchus mykiss,subspecies,Rainbow Trout (Summer Steelhead),,0,,1
+213,SOM18,Salmonidae,Oncorhynchus,mykiss,,Onchorynchus mykiss,subspecies,Rainbow Trout (Winter Steelhead),,0,,1
+214,SOM19,Salmonidae,Oncorhynchus,mykiss,,Onchorynchus mykiss,subspecies,Stocked Rainbow Trout (bin),,0,images\CoastalRainbow.jpg,1
+215,CCX01,Cottidae,Cottus,--,,,,Sculpin spp (bin),Catchall for sculpin,0,,1
+216,SOK04,Salmonidae,Oncorhynchus,kisutch,,Oncorhynchus kisutch,subspecies,Coho (bin),,0,,1
+217,CRO08,Cyprinidae,Rhinichthys,osculus,,Rhinichthys osculus subspecies,subspecies,Speckled Dace (bin),,0,images\SpeckledDace.jpg,1
+218,AAM03,Ambystomatidae,Ambystoma,macrodactylum,,Ambystoma macrodactylum,species,Long-toed Salamander,amphib,1,,0
+219,BAC01,Bufonidae,Anaxyrus,canorus,,Anaxyrus canorus,species,Yosemite Toad,amphib,1,,0
+220,BAB01,Bufonidae,Anaxyrus,boreas,,Anaxyrus boreas,species,Western toad,amphib,1,,0
+221,HPR01,Hylidae,Pseudacris,regilla,,Pseudacris regilla,species,Pacific chorus frog,amphib,1,,0
+222,RRM01,Ranidae,Rana,muscosa,,Rana muscosa,species,Sierra Madre yellow-legged frog,amphib,1,,0
+223,RRS01,Ranidae,Rana,sierrae,,Rana sierrae,species,Sierra Nevada yellow-legged frog,amphib,1,,0
+224,STT01,Salamandridae,Taricha,torosa,,Taricha torosa,species,California newt,amphib,1,,0
+225,AAM04,Ambystomatidae,Ambystoma,macrodactylum,croceum,Ambystoma macrodactylum croceum,subspecies,Santa Cruz long-toed Salamander,amphib,1,,0
+226,BAC02,Bufonidae,Anaxyrus,californicus,,Anaxyrus californicus,species,Arroyo Toad,amphib,1,,0
+227,ZZZ01,,,,,,,temp,,0,,1
+228,PEF01,Petromyzontidae,Entosphenus,folletti,,Entosphenus folletti,species,Northern California brook lamprey,,1,,0
+229,GTB01,Gobiidae,Tridentiger,bifasciatus,,Tridentiger bifasciatus,species,Shimofuri goby,,0,,0
+231,PPG02,Poeciliidae,Poeciliopsis,gracilis,,Poeciliopsis gracilis,species,Porthole livebearer,,0,,0
+232,CTZ01,Cichlidae,Tilapia,zillii,,Tilapia zillii,species,Redbelly tilapia,part of CA tilapia complex,0,,0
+233,SOC05,Salmonidae,Oncorhynchus,clarkii,pleuriticus,Oncorhynchus clarkii pleuriticus,subspecies,Colorado River cutthroat trout,,0,,0
+234,COM03,Cichlidae,Oreochromis,spp,,Oreochromis spp.,complex,California tilapia (hybrid),,0,,0
+235,FLG01,Fundulidae,Lucania,goodei,,Lucania goodei,species,Bluefin killifish,,0,,0
+272,AAC01,Ambystomatidae,Ambystoma,californiense,,Ambystoma californiense,,California tiger salamander,,1,,0
+273,AAG01,Ambystomatidae,Ambystoma,gracile,,Ambystoma gracile,,Northwestern salamander,,1,,0
+274,AAT02,Ascaphidae,Ascaphus,truei,,Ascaphus truei,,Coastal tailed frog,,1,,0
+275,PBC01,Plethodontidae,Batrachoseps,campi,,Batrachoseps campi,,Inyo Mountains salamander,,1,,0
+276,BAC03,Bufonidae,Anaxyrus,cognatus,,Anaxyrus cognatus,,Great Plains toad,,1,,0
+277,BAE01,Bufonidae,Anaxyrus,exsul,,Anaxyrus exsul,,Black toad,,1,,0
+278,BAP01,Bufonidae,Anaxyrus,punctatus,,Anaxyrus punctatus,,Red-spotted toad,,1,,0
+279,BAW01,Bufonidae,Anaxyrus,woodhousii,,Anaxyrus woodhousii,,Woodhouse's toad,,1,,0
+280,DDE01,Dicamptodontidae,Dicamptodon,ensatus,,Dicamptodon ensatus,,California giant salamander,,1,,0
+281,DDT01,Dicamptodontidae,Dicamptodon,tenebrosus,,Dicamptodon tenebrosus,,Coastal giant salamander,,1,,0
+282,EEM01,Emydidae,Emys,marmorata,,Emys marmorata,,Western pond turtle,,1,,0
+283,PPD01,Plethodontidae,Plethodon,dunni,,Plethodon dunni,,Dunn's salamander,,1,,0
+284,HPC01,Hylidae,Pseudacris,cadaverina,,Pseudacris cadaverina,,California tree frog,,1,,0
+285,RRA01,Ranidae,Rana,aurora,,Rana aurora,,Northern red-legged frog,,1,,0
+286,RRB01,Ranidae,Rana,boylii,,Rana boylii,,Foothill yellow-legged frog,,1,,0
+287,RRC01,Ranidae,Rana,cascadae,,Rana cascadae,,Cascades frog,,1,,0
+288,RRD01,Ranidae,Rana,draytonii,,Rana draytonii,,California red-legged frog,,1,,0
+289,RRP01,Ranidae,Rana,pipiens,,Rana pipiens,,Northern leopard frog,,1,,0
+290,RRP02,Ranidae,Rana,pretiosa,,Rana pretiosa,,Oregon spotted frog,,1,,0
+291,RRV01,Rhyacotritonidae,Rhyacotriton,variegatus,,Rhyacotriton variegatus,,Southern torrent salamander,,1,,0
+292,SSC04,Scaphiopodidae,Scaphiopus,couchii,,Scaphiopus couchii,,Couch's spadefoot toad,,1,,0
+293,SSH01,Scaphiopodidae,Spea,hammondii,,Spea hammondii,,Western spadefoot toad,,1,,0
+294,SSI01,Scaphiopodidae,Spea,intermontana,,Spea intermontana,,Great Basin spadefoot,,1,,0
+295,STG01,Salamandridae,Taricha,granulosa,,Taricha granulosa,,Rough-skinned newt,,1,,0
+296,STR01,Salamandridae,Taricha,rivularis,,Taricha rivularis,,Red-bellied newt,,1,,0
+297,STS01,Salamandridae,Taricha,sierrae,,Taricha sierrae,,Sierra newt,,1,,0
+298,CTA01,Colubridae,Thamnophis,atratus,,Thamnophis atratus,,Aquatic gartersnake,,1,,0
+299,CTC01,Colubridae,Thamnophis,couchii,,Thamnophis couchii,,Sierra gartersnake,,1,,0
+300,CTE01,Colubridae,Thamnophis,elegans,,Thamnophis elegans,,Western terrestrial gartersnake,,1,,0
+301,CTG01,Colubridae,Thamnophis,gigas,,Thamnophis gigas,,Giant gartersnake,,1,,0
+302,CTH01,Colubridae,Thamnophis,hammondii,,Thamnophis hammondii,,Twp-striped gartersnake,,1,,0
+303,CTM01,Colubridae,Thamnophis,marcianus,,Thamnophis marcianus,,Checkered gartersnake,,1,,0
+304,CTO01,Colubridae,Thamnophis,ordinoides,,Thamnophis ordinoides,,Northwestern gartersnake,,1,,0
+305,CTS01,Colubridae,Thamnophis,sirtalis,,Thamnophis sirtalis,,Common gartersnake,,1,,0
+306,PXL01,Pipidae,Xenopus,laevis,,Xenopus laevais,,African Clawed Frog,,0,,0
+307,RLC01,Ranidae,Lithobates,catesbeianus,,Lithobates catesbeianus,,American Bullfrog,,0,,0
+308,HPH01,Hylidae,Pseudacris,hypochondriaca,,Pseudacris hypochondriaca,,Baja California Treefrog,,1,,0
+309,BAB02,Bufonidae,Anaxyrus,boreas,halophilus,Anaxyrus boreas halophilus,,California Toad,,1,,0
+310,CLG03,Colubridae,Lampropeltis,getula,,Lampropeltis getula,,Common Kingsnake,,1,,0
+311,CTS02,Colubridae,Thamnophis,sirtalis,tetrataenia,Thamnophis sirtalis tetrataenia,subspecies,San Francisco Gartersnake,,1,,0
+312,PAN01,Plethodontidae,Aneides,niger,,Aneides niger,,Santa Cruz Black Salamander,,1,,0
+314,PAI01,Plethodontidae,Aneides,iecanus,,Aneides iecanus,,Shasta Black Salamander,,1,,0
+315,HPS01,Hylidae,Pseudacris,sierra,,Pseudacris sierra,,Sierran Treefrog,,1,,0
+316,CTS03,Colubridae,Thamnophis,sirtalis,spp. 1,Thamnophis sirtalis spp.1,,South Coast Gartersnake,,1,,0
+317,PAF01,Plethodontidae,Aneides,flavipunctatus,flavipunctatus,Aneides flavipunctatus flavipunctatus,subspecies,Speckled Black Salamander,,1,,0
+318,PAV01,Plethodontidae,Aneides,vagrans,,Aneides vagrans,,Wandering Salamander,,1,,0
+320,AEC01,Anguidae,Elgaria,coerulea,,Elgaria coerulea,,Northern Alligator Lizard,,1,,0
+321,AEC02,Anguidae,Elgaria,multicarinata,,Elgaria multicarinata,,Southern Alligator Lizard,,1,,0
+322,PPE01,Plethodontidae,Plethodon,elongatus,,Plethodon elongatus,,Del Norte Salamander,,1,,0
+323,PPS02,Plethodontidae,Plethodon,stormi,,Plethodon stormi,,Siskiyou Mountains Salamander,,1,,0
+324,EAM01,Emydidae,Actinemys,marmorata,,Actinemys marmorata,,Western Pond Turtle,,1,,0
+325,UNI01,Unionidae,,,,,family,Unionidae family,Mollusks,0,,0
+326,MAR01,Margaritiferidae,,,,,family,Margaritiferidae family,Mollusks,0,,0
+327,SPH01,Sphaeriidae,,,,,family,Sphaeriidae family,Mollusks,0,,0
+328,PLE01,Pleuroceridae,,,,,family,Pleuroceridae family,Mollusks,0,,0
+329,HYD01,Hydrobiidae,,,,,family,Hydrobiidae family,Mollusks,0,,0
+330,LYM01,Lymnaeidae,,,,,family,Lymnaeidae family,Mollusks,0,,0
+331,AME01,Ameletidae,,,,,family,Ameletidae family,Arthropod,0,,0
+332,AMP01,Amphizoidae,,,,,family,Amphizoidae family,Arthropod,0,,0
+333,APA01,Apataniidae,,,,,family,Apataniidae family,Arthropod,0,,0
+334,ATH01,Athericidae,,,,,family,Athericidae family,Arthropod,0,,0
+335,BLE01,Blephariceridae,,,,,family,Blephariceridae family,Arthropod,0,,0
+336,BRA01,Brachycentridae,,,,,family,Brachycentridae family,Arthropod,0,,0
+337,CAL01,Calamoceratidae,,,,,family,Calamoceratidae family,Arthropod,0,,0
+338,CAP01,Capniidae,,,,,family,Capniidae family,Arthropod,0,,0
+339,CHL01,Chloroperlidae,,,,,family,Chloroperlidae family,Arthropod,0,,0
+340,COR01,Cordulegastridae,,,,,family,Cordulegastridae family,Arthropod,0,,0
+343,DEU01,Deuterophlebiidae,,,,,family,Deuterophlebiidae family,Arthropod,0,,0
+344,DIX01,Dixidae,,,,,family,Dixidae family,Arthropod,0,,0
+345,ELM01,Elmidae,,,,,family,Elmidae family,Arthropod,0,,0
+346,EPH01,Ephemerellidae,,,,,family,Ephemerellidae family,Arthropod,0,,0
+347,EUL01,Eulichadidae,,,,,family,Eulichadidae family,Arthropod,0,,0
+348,GLO01,Glossosomatidae,,,,,family,Glossosomatidae family,Arthropod,0,,0
+349,GOE01,Goeridae,,,,,family,Goeridae family,Arthropod,0,,0
+350,HEL01,Helicopsychidae,,,,,family,Helicopsychidae family,Arthropod,0,,0
+351,HEP01,Heptageniidae,,,,,family,Heptageniidae family,Arthropod,0,,0
+352,ISO01,Isonychiidae,,,,,family,Isonychiidae family,Arthropod,0,,0
+353,LEP01,Lepidostomatidae,,,,,family,Lepidostomatidae family,Arthropod,0,,0
+354,LEU01,Leuctridae,,,,,family,Leuctridae family,Arthropod,0,,0
+355,LIM01,Limnephilidae,,,,,family,Limnephilidae family,Arthropod,0,,0
+356,LUT01,Lutrochidae,,,,,family,Lutrochidae family,Arthropod,0,,0
+357,MAC01,Macromiidae,,,,,family,Macromiidae family,Arthropod,0,,0
+358,NEM01,Nemouridae,,,,,family,Nemouridae family,Arthropod,0,,0
+359,ODO01,Odontoceridae,,,,,family,Odontoceridae family,Arthropod,0,,0
+360,PEL01,Peltoperlidae,,,,,family,Peltoperlidae family,Arthropod,0,,0
+361,PER01,Perlidae,,,,,family,Perlidae family,Arthropod,0,,0
+363,PET03,Petaluridae,,,,,family,Petaluridae family,Arthropod,0,,0
+364,PHI01,Philopotamidae,,,,,family,Philopotamidae family,Arthropod,0,,0
+365,PHR01,Phryganeidae,,,,,family,Phryganeidae family,Arthropod,0,,0
+366,PSY01,Psychomyiidae,,,,,family,Psychomyiidae family,Arthropod,0,,0
+367,PTE01,Pteronarcyidae,,,,,family,Pteronarcyidae family,Arthropod,0,,0
+368,PTI01,Ptilodactylidae,,,,,family,Ptilodactylidae family,Arthropod,0,,0
+369,RHY01,Rhyacophilidae,,,,,family,Rhyacophilidae family,Arthropod,0,,0
+370,SCI01,Scirtidae,,,,,family,Scirtidae family,Arthropod,0,,0
+371,SER01,Sericostomatidae,,,,,family,Sericostomatidae family,Arthropod,0,,0
+372,TAE01,Taeniopterygidae,,,,,family,Taeniopterygidae family,Arthropod,0,,0
+373,TAN01,Tanyderidae,,,,,family,Tanyderidae family,Arthropod,0,,0
+374,UEN01,Uenoidae,,,,,family,Uenoidae family,Arthropod,0,,0
+375,ANI01,Anisogammaridae,,,,,family,Anisogammaridae family,Crustacean,0,,0
+376,ASE01,Asellidae,,,,,family,Asellidae family,Crustacean,0,,0
+377,AST01,Astacidae,,,,,family,Astacidae family,Crustacean,0,,0
+378,ATY01,Atyidae,,,,,family,Atyidae family,Crustacean,0,,0
+379,CHI01,Chirocephalidae,,,,,family,Chirocephalidae family,Crustacean,0,,0
+380,CRA01,Crangonyctidae,,,,,family,Crangonyctidae family,Crustacean,0,,0
+381,COR02,Corduliidae,,,,,family,Corduliidae family,Arthropod,0,,0
+382,COR03,Corydalidae,,,,,family,Corydalidae family,Arthropod,0,,0
+383,PER02,Perlodidae,,,,,family,Perlodidae family,Arthropod,0,,0
+384,CSB07,Cyprinidae,Siphatales,bicolor,,Siphatales bicolor,subspecies,Tui chub bin,,,,1
+385,CLS09,Cyprinidae,Hesperoleucus,symmetricus,,Hesperoleucus symmetricus,subspecies,Kaweah roach,modified - Peter roach split 2018,1,,0
