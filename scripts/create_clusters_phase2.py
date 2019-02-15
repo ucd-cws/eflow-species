@@ -305,7 +305,79 @@ def species_2018_10_09():
 																								spatial_constraint)
 	metadata.finish()
 
+def all_natives_2018_12_13():
+	presence_types = "1,3,9"
+	spatial_constraint = "CONTIGUITY_EDGES_CORNERS"
+	aggregation_level = "species"
+	output_path = os.path.join(eflows_folder,
+							   r"data\report_update\scratch.gdb\all_natives_aggregation_v15_2018_12_13".format(
+								   aggregation_level))
+	tbx_make_clusters.make_species_clusters(output_path=output_path,
+											group_name="Native_Fish",
+											presence_values=presence_types,  # current presence without translocations
+											min_species=1,
+											# this is a shortcut to remove all the out of state areas - don't cluster empty areas
+											num_groups=(3, 4, 5, 6, 7, 8, 9, 10, 11, 12), # added two because great_basin region is especially wonky - see what happens with only two groups
+											huc_regions=os.path.join(eflows_folder, r"data\regions\regions.gdb\regions_noesturary_nodesert_2018_09_17"),
+											region_group_field="huc_region_group",
+											aggregation=aggregation_level,
+											spatial_constraint=spatial_constraint, )
+
+	metadata = arcpy_metadata.MetadataEditor(output_path)
+	metadata.purpose = "Using all native fish because of discovery of incomplete flow sensitive list. This run isn't" \
+					   "meant to be used as is, but as a precursor to a run that has a new flow sensitive list that is" \
+					   "almost all of the native fish. Run by Nick 12/13/2018.\n\n" \
+					   "Metadata from prior run is below:\n\n" \
+					   "Rerun of 9/17/2018 run, with a PISCES bug that filtered HUCs to ones with the correct number of" \
+					   "minimum taxa fixed. Clustering of flow sensitive species aggregated to the {} level for PISCES presence values {}. This version" \
+					   "uses new regions where HUCs in HUC_10 1805000101 were moved from the north_coast region to the" \
+					   "central_valley because they all drain out Suisun Marsh and HUCs in the same HUC_10s as the San Francisco" \
+					   "Bay, including the Bay itself, were removed in order to get rid of weird behavior in North Coast" \
+					   "clustering. These estuary HUCs and the Delta HUCs will need to be managed separately from this" \
+					   "clustering. This version excludes empty areas. This version also reflects taxonomic changes and " \
+					   "corrections in PISCES, specifically to Roach subspecies and to the split between" \
+					   " Tidewater Goby. Spatial constraint was {}.".format(presence_types,
+																								aggregation_level,
+																								spatial_constraint)
+	metadata.finish()
+
+
+def new_flow_sensitive_2019_02_14():
+	presence_types = "1,3,9"
+	spatial_constraint = "CONTIGUITY_EDGES_CORNERS"
+	aggregation_level = "species"
+	new_name = "new_flow_sensitive_aggregation_{}_v16_2019_02_14".format(aggregation_level)
+	output_path = os.path.join(eflows_folder, r"data\report_update\scratch.gdb\{}".format(new_name))
+	tbx_make_clusters.make_species_clusters(output_path=output_path,
+											group_name="Flow_Sensitive_V2",
+											presence_values=presence_types,  # current presence without translocations
+											min_species=1,
+											# this is a shortcut to remove all the out of state areas - don't cluster empty areas
+											num_groups=(3, 4, 5, 6), # added two because great_basin region is especially wonky - see what happens with only two groups
+											huc_regions=os.path.join(eflows_folder, r"data\regions\regions.gdb\regions_noesturary_nodesert_2018_09_17"),
+											region_group_field="huc_region_group",
+											aggregation=aggregation_level,
+											spatial_constraint=spatial_constraint,
+											report_folder=os.path.join(eflows_folder, "data", "report_update", new_name))
+
+	metadata = arcpy_metadata.MetadataEditor(output_path)
+	metadata.purpose = "New run with new flow sensitive species list (116 taxa) and range updates from Camm Swift and" \
+					   "SOS II (Mountain Whitefish only). Those range updates mostly apply to the *old* flow sensitive" \
+					   "list, and there may be updates for the newly added species. Alyssa will look into this soon." \
+					   "Run by Nick 12/21/2018.\n\n" \
+					   "Metadata from prior run is below:\n\n" \
+					   "Rerun of 9/17/2018 run, with a PISCES bug that filtered HUCs to ones with the correct number of" \
+					   "minimum taxa fixed. Clustering of flow sensitive species aggregated to the {} level for PISCES presence values {}. This version" \
+					   "uses new regions where HUCs in HUC_10 1805000101 were moved from the north_coast region to the" \
+					   "central_valley because they all drain out Suisun Marsh and HUCs in the same HUC_10s as the San Francisco" \
+					   "Bay, including the Bay itself, were removed in order to get rid of weird behavior in North Coast" \
+					   "clustering. These estuary HUCs and the Delta HUCs will need to be managed separately from this" \
+					   "clustering. This version excludes empty areas. This version also reflects taxonomic changes and " \
+					   "corrections in PISCES, specifically to Roach subspecies and to the split between" \
+					   " Tidewater Goby. Spatial constraint was {}.".format(presence_types,
+																								aggregation_level,
+																								spatial_constraint)
+	metadata.finish()
+
 if __name__ == "__main__":  # basically, this line only runs if this is the primary script being executed, rather than an imported file
-	# statewide_2018_09_16()
-	# species_2018_09_17()
-	species_2018_10_09()
+	new_flow_sensitive_2019_02_14()
