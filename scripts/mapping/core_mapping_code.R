@@ -5,9 +5,9 @@ library(rgdal)
 library(tidyr)
 library(dplyr)
 
-group_palette <- c('#a6cee3','#1f78b4','#b2df8a','#33a02c','#fb9a99','#e31a1c','#fdbf6f','#ff7f00','#cab2d6','#6a3d9a')
+group_palette <- c('#a6cee3','#1f78b4','#b2df8a','#33a02c','#fb9a99','#e31a1c','#fdbf6f','#ff7f00','#cab2d6','#6a3d9a','#524423','#4c11bb')
 
-default_num_groups <- c(2,3,4,5,6,7,8)
+default_num_groups <- c(3,4,5,6,7,8,9,10,11,12)
 
 huc12_eflow_percents <- read.csv(file.path("../..", "/data/HUC12s_eflow_percent.csv"), stringsAsFactors = FALSE)
 suffix<-"groups_num"
@@ -18,7 +18,7 @@ filter_data_to_group <- function (group_name, data){
   return(data %>% drop_na(paste(group_name,'_7groups_num', sep="")))    
 }
 
-species_maps <-function(groupname, title, region_data, num_groups=10){
+species_maps <-function(groupname, title, region_data, num_groups=12){
   
   group_limits = 1:num_groups
   
@@ -26,7 +26,7 @@ species_maps <-function(groupname, title, region_data, num_groups=10){
   
   # now, we need to convert the attributes we're using for groupings into a single column so that GGPlot can do our mapping for us with facets
   # paste(groupname,"_2",suffix, sep=""),paste(groupname,"_8",suffix, sep=""),paste(groupname,"_9",suffix, sep=""), paste(groupname,"_3",suffix, sep=""),paste(groupname,"_4",suffix, sep=""),paste(groupname,"_5",suffix, sep=""),paste(groupname,"_6",suffix, sep=""),
-  huc_data_mapping <- huc_data %>% gather(key=model_run, value=grouping, paste(groupname,"_2",suffix, sep=""), paste(groupname,"_3",suffix, sep=""), paste(groupname,"_4",suffix, sep=""),paste(groupname,"_5",suffix, sep=""),paste(groupname,"_6",suffix, sep=""),paste(groupname,"_7",suffix, sep=""), paste(groupname,"_8",suffix, sep=""))
+  huc_data_mapping <- huc_data %>% gather(key=model_run, value=grouping, paste(groupname,"_3",suffix, sep=""), paste(groupname,"_4",suffix, sep=""),paste(groupname,"_5",suffix, sep=""),paste(groupname,"_6",suffix, sep=""),paste(groupname,"_7",suffix, sep=""), paste(groupname,"_8",suffix, sep=""), paste(groupname,"_9",suffix, sep=""),paste(groupname,"_10",suffix, sep=""),paste(groupname,"_11",suffix, sep=""),paste(groupname,"_12",suffix, sep=""),)
   
   plot <- ggplot() + 
     geom_sf(huc_data_mapping, lwd = 5, mapping=aes(fill=factor(grouping)), color=NA)+
